@@ -1,29 +1,43 @@
 IUTBX_Projet2_S1
 ================
 
-Treasure Hunt
+#Treasure Hunt
 
-Répartition des fichers :
--main.cpp
-  création du menu
-  mettre à jour le jeu
-  
--gestion.cpp
-    mise à jour du jeu
-    affichage des images
+##Répartition des fichers :
+
+
+**main.cpp**
+
+1. création du menu
+
+**gestion.cpp**
+
+1. mises à jour du jeu
+
+2. affichage des images
     
--piece.cpp
-  creation des pièces
-  14 de 10, 14 de 20, 14 de 30, 5 de 5 et 1 de 100
-  
--plateau.cpp
-  création du plateau de jeu (grille plus partie bonus)
-  initialisation de la grille
+**piece.cpp**
 
--joueur.cpp
-  placer le joueur au centre
-  déplacement du joueur (horizontal et vertical)
-  gestion des scores
-  si le joueur de peux plus bouger il a perdu
-  gestion des bonus
-  (créer une IA)
+1. creation des pièces
+
+2. condition : 14 de 10, 14 de 20, 14 de 30, 5 de 5 et 1 de 100
+  
+**plateau.cpp**
+
+1. création du plateau de jeu (grille plus partie bonus)
+
+2. initialisation de la grille
+
+**joueur.cpp**
+  
+1. placer le joueur au centre
+
+2. déplacement du joueur (horizontal et vertical)
+
+3. gestion des scores
+
+4. si le joueur de peux plus bouger il a perdu
+
+5. gestion des bonus
+
+6. (créer une IA)
