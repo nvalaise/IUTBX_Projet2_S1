@@ -1,5 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef PIECE_H
+#define PIECE_H
 
 /***********************************
 Declaration des includes
@@ -15,18 +15,28 @@ Declaration des includes
 
 //fichier internes
 #include "gestion.h"
-#include "piece.h"
-#include "plateau.h"
 
 /***********************************
 Declaration des constantes
-************************************/
+************************************/ 
 
 /***********************************
 Declaration des structures
 ************************************/
+struct Piece
+{
+	const int LARGEUR_IMAGE = 61;
+	const int HAUTEUR_IMAGE = 61;
+	SDL_Surface* sprite = chargerImage("pieces.png");
+	SDL_Rect image[6];
+	int x, y;
+	int valeur;
+	int xMatrice, yMatrice;
+};
 
 /***********************************
 Declaration des prototype
 ************************************/
+void cleanPiece(Piece &unePiece);
+
 #endif

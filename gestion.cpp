@@ -7,25 +7,13 @@ SDL_Surface* chargerImage(string nomFichier)
 	//image charger non optimiser
 	SDL_Surface* imageCharger = NULL;
 
-	//image qui va etre optimiser
-	SDL_Surface* imageOptimiser = NULL;
-
 	imageCharger = IMG_Load(nomFichier.c_str());
-
-	if (imageCharger != NULL)
-	{
-		//on optimise l'image charger
-		imageOptimiser = SDL_DisplayFormat(imageCharger);
-
-		//on suprpime l'ancienne
-		SDL_FreeSurface(imageCharger);
-	}
-
-	else
+	
+	if (imageCharger == NULL)
 	{
 		cout << "Can't open this file : " << nomFichier << endl;
 	}
-	return imageOptimiser;
+	return imageCharger;
 }
 
 SDL_Surface* chargerImageCleCouleur(string nomFichier, int rouge, int vert, int bleu)
@@ -69,8 +57,6 @@ void maj(Gestion &jeu)
 	
 	//on applique les images
 
-	//on met à jour l'écran
-	SDL_Flip(jeu.ecran);
 }
 
 void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination)

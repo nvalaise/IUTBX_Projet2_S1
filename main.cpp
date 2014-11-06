@@ -1,5 +1,4 @@
 #include "main.h"
-#include "gestion.h"
 
 using namespace std;
 
@@ -7,6 +6,8 @@ int main(int argc, char* argv[])
 {
 
 	Gestion jeu;
+	Piece unePiece;
+	Plateau plateau;
 
 	//initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -14,7 +15,9 @@ int main(int argc, char* argv[])
 	jeu.ecran = SDL_SetVideoMode(jeu.LARGEUR_ECRAN, jeu.HAUTEUR_ECRAN, jeu.BPP_ECRAN, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
 	//creation du titre de la fenetre
-	SDL_WM_SetCaption("SDL application", NULL);
+	SDL_WM_SetCaption("Treasure Hunt", NULL);
+
+	initPlateau(plateau);
 
 	//tant qu'on est dans le jeu
 	while (!jeu.quit)
@@ -33,12 +36,17 @@ int main(int argc, char* argv[])
 		appuiTouche(jeu);
 
 		maj(jeu);
+		afficherPlateau(plateau, jeu);
+
+		SDL_Flip(jeu.ecran);
 
 		SDL_Delay(10);
 	}
 
 	//on supprime toutes les images
 	SDL_FreeSurface(jeu.ecran);
+
+	cleanPiece(unePiece);
 
 	TTF_Quit();
 	SDL_Quit();

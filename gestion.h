@@ -22,8 +22,8 @@ Declaration des structures
 ************************************/
 struct Gestion
 {
-	const int LARGEUR_ECRAN = 640;
-	const int HAUTEUR_ECRAN = 400;
+	const int LARGEUR_ECRAN = 427;
+	const int HAUTEUR_ECRAN = 427;
 	const int BPP_ECRAN = 32;
 
 	SDL_Surface* ecran = NULL;
