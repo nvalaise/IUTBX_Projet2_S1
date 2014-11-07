@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	//creation du titre de la fenetre
 	SDL_WM_SetCaption("Treasure Hunt", NULL);
 
-	initPlateau(plateau);
+	placementPiecesTableau(plateau);
 
 	//tant qu'on est dans le jeu
 	while (!jeu.quit)
@@ -34,8 +34,10 @@ int main(int argc, char* argv[])
 		}
 		//si on appuie sur une touche
 		appuiTouche(jeu);
+		
+		//affichage de l'ecran en blanc , supprime donc tout l'ecran
+		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
-		maj(jeu);
 		afficherPlateau(plateau, jeu);
 
 		SDL_Flip(jeu.ecran);

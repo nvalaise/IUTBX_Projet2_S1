@@ -44,8 +44,6 @@ SDL_Surface* chargerImage(std::string nomFichier);
 
 SDL_Surface* chargerImageCleCouleur(std::string nomFichier, int rouge, int vert, int bleu);
 
-void maj(Gestion &jeu);
-
 void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination);
 
 void appliquerClip(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip);

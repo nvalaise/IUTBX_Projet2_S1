@@ -35,7 +35,7 @@ struct Plateau
 /***********************************
 Declaration des prototype
 ************************************/
-void initPlateau(Plateau &plateau);
+void placementPiecesTableau(Plateau &plateau);
 void afficherPlateau(Plateau &plateau, Gestion &jeu);
 
 #endif
