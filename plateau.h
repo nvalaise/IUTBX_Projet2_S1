@@ -15,6 +15,7 @@ Declaration des includes
 #include <SDL_ttf.h>
 
 //fichier interne
+#include "joueur.h"
 #include "piece.h"
 #include "gestion.h"
 
@@ -30,12 +31,13 @@ Declaration des structures
 struct Plateau
 {
 	Piece matrice[NB_BLOCK_HAUTEUR][NB_BLOCK_LARGEUR];
+	Joueur position[NB_BLOCK_HAUTEUR][NB_BLOCK_LARGEUR];
 };
 
 /***********************************
 Declaration des prototype
 ************************************/
 void initPlateau(Plateau &plateau);
-void afficherPlateau(Plateau &plateau, Gestion &jeu);
+void afficherPlateau(Plateau &plateau, Gestion &jeu, Joueur &joueur);
 
 #endif

@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	Gestion jeu;
 	Piece unePiece;
 	Plateau plateau;
-
+    Joueur joueur;
 	//initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 		appuiTouche(jeu);
 
 		maj(jeu);
-		afficherPlateau(plateau, jeu);
+		afficherPlateau(plateau, jeu, joueur);
 
 		SDL_Flip(jeu.ecran);
 
