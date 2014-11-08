@@ -50,15 +50,6 @@ SDL_Surface* chargerImageCleCouleur(string nomFichier, int rouge, int vert, int 
 	return imageOptimiser;
 }
 
-void maj(Gestion &jeu)
-{
-	//affichage de l'ecran en blanc , supprime donc tout l'ecran
-	SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-	
-	//on applique les images
-
-}
-
 void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 {
 	SDL_Rect offset;
