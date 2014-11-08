@@ -15,7 +15,6 @@ void placementPiecesTableau(Plateau &plateau)
 	{
 		for (int j = 0; j < NB_BLOCK_LARGEUR; j++)
 		{
-<<<<<<< HEAD
 			nombreAleatoire = rand() % 5 + 1;
 
             if((i==3) && (j==3))
