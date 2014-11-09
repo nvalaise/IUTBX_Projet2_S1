@@ -15,10 +15,9 @@ Declaration des includes
 #include <SDL_ttf.h>
 
 //fichier interne
-#include "joueur.h"
 #include "piece.h"
 #include "gestion.h"
-
+#include "joueur.h"
 /***********************************
 Declaration des constantes
 ************************************/
@@ -37,12 +36,7 @@ struct Plateau
 /***********************************
 Declaration des prototype
 ************************************/
-<<<<<<< HEAD
 void initPlateau(Plateau &plateau);
-void afficherPlateau(Plateau &plateau, Gestion &jeu, Joueur &joueur);
-=======
-void placementPiecesTableau(Plateau &plateau);
 void afficherPlateau(Plateau &plateau, Gestion &jeu);
->>>>>>> d7d04689bf5e7163932c09825a09ddc25c7ad70c
 
 #endif
