@@ -32,7 +32,7 @@ struct Joueur
 	SDL_Rect pirates[2];
 
 	int xJ, yJ;
-	int valeurJ;
+	int valeur;
 	int score;
 };
 
