@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
         afficherPiecePlateau(plateau, jeu);
         afficherPirate(pirate, jeu, 0);
-        deplacerPirate(pirate, jeu, 0);
+        deplacerPirate(pirate, jeu, plateau, 0);
 
         SDL_Flip(jeu.ecran);
 

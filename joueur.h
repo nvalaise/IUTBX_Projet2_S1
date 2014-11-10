@@ -15,6 +15,7 @@ Declaration des includes
 
 //fichier internes
 #include "gestion.h"
+#include "plateau.h"
 
 /***********************************
 Declaration des constantes
@@ -33,6 +34,7 @@ struct Joueur
 
 	int x, y;
 	int xMatrice, yMatrice;
+	int score;
 };
 
 /***********************************
@@ -41,6 +43,6 @@ Declaration des prototype
 void initPirate(Joueur &pirate);
 void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
 
-void deplacerPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
+void deplacerPirate(Joueur &pirate, Gestion &jeu, Plateau &plateau, int numeroPirate);
 
 #endif

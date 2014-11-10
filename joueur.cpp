@@ -34,12 +34,23 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate)
 
 }
 
-void deplacerPirate(Joueur &pirate, Gestion &jeu ,int numeroPirate)
+void deplacerPirate(Joueur &pirate, Gestion &jeu, Plateau &plateau, int numeroPirate)
 {
-    pirate.xMatrice = jeu.xSouris / pirate.LARGEUR_IMAGE;
-    pirate.yMatrice = jeu.ySouris / pirate.HAUTEUR_IMAGE;
+    int x = jeu.xSouris / pirate.LARGEUR_IMAGE;
+    int y = jeu.ySouris / pirate.HAUTEUR_IMAGE;
 
-    pirate.x = pirate.xMatrice * pirate.LARGEUR_IMAGE;
-	pirate.y = pirate.yMatrice * pirate.HAUTEUR_IMAGE;
+    if(((x==pirate.xMatrice) || (y==pirate.yMatrice)) && (uneFois))
+    {
+        pirate.xMatrice = jeu.xSouris / pirate.LARGEUR_IMAGE;
+        pirate.yMatrice = jeu.ySouris / pirate.HAUTEUR_IMAGE;
 
+        pirate.x = pirate.xMatrice * pirate.LARGEUR_IMAGE;
+        pirate.y = pirate.yMatrice * pirate.HAUTEUR_IMAGE;
+/*************
+On peut affecter le score comme ça :
+        pirate.score += plateau.matrice[pirate.xMatrice][pirate.yMatrice].valeur;
+        cout << pirate.score << endl ;
+mais ça fait une boucle infini ...
+**************/
+    }
 }
