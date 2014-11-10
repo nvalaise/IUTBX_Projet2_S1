@@ -8,11 +8,12 @@ SDL_Surface* chargerImage(string nomFichier)
 	SDL_Surface* imageCharger = NULL;
 
 	imageCharger = IMG_Load(nomFichier.c_str());
-	
+
 	if (imageCharger == NULL)
 	{
 		cout << "Can't open this file : " << nomFichier << endl;
 	}
+	
 	return imageCharger;
 }
 
@@ -21,33 +22,22 @@ SDL_Surface* chargerImageCleCouleur(string nomFichier, int rouge, int vert, int 
 	//image charger non optimiser
 	SDL_Surface* imageCharger = NULL;
 
-	//image qui va etre optimiser
-	SDL_Surface* imageOptimiser = NULL;
-
 	imageCharger = IMG_Load(nomFichier.c_str());
 
 	if (imageCharger != NULL)
 	{
 		//on optimise l'image charger
-		imageOptimiser = SDL_DisplayFormat(imageCharger);
+		Uint32 cleCouleur = SDL_MapRGB(imageCharger->format, rouge, vert, bleu);
 
-		if (imageOptimiser != NULL)
-		{
-			Uint32 cleCouleur = SDL_MapRGB(imageOptimiser->format, rouge, vert, bleu);
-
-			//charge l'image avec une cle couleur
-			SDL_SetColorKey(imageOptimiser, SDL_RLEACCEL | SDL_SRCCOLORKEY, cleCouleur);
-		}
-
-		//on suprpime l'ancienne
-		SDL_FreeSurface(imageCharger);
+		//charge l'image avec une cle couleur
+		SDL_SetColorKey(imageCharger, SDL_RLEACCEL | SDL_SRCCOLORKEY, cleCouleur);
 	}
 	else
 	{
 		cout << "Can't open this file : " << nomFichier << endl;
 	}
 
-	return imageOptimiser;
+	return imageCharger;
 }
 
 void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination)

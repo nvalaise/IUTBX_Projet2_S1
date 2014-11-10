@@ -17,6 +17,7 @@ Declaration des includes
 #include "gestion.h"
 #include "piece.h"
 #include "plateau.h"
+#include "joueur.h"
 
 /***********************************
 Declaration des constantes

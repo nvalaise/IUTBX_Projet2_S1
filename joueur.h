@@ -9,9 +9,9 @@ Declaration des includes
 #include <string>
 
 //declaration de la SDL
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL\SDL.h>
+#include <SDL\SDL_image.h>
+#include <SDL\SDL_ttf.h>
 
 //fichier internes
 #include "gestion.h"
@@ -25,21 +25,20 @@ Declaration des structures
 ************************************/
 struct Joueur
 {
-    const int LARGEUR_PIRATE = 61;
-	const int HAUTEUR_PIRATE = 61;
+	const int LARGEUR_IMAGE = 61;
+	const int HAUTEUR_IMAGE = 61;
 
-	SDL_Surface* pirate = chargerImage("piratesSprite2.bmp");
-	SDL_Rect pirates[2];
+	SDL_Surface* sprite = chargerImageCleCouleur("pirates.png", 0, 255, 255);
+	SDL_Rect image[2];
 
-	int xJ, yJ;
-	int valeur;
-	int score;
+	int x, y;
+	int xMatrice, yMatrice;
 };
 
 /***********************************
 Declaration des prototype
 ************************************/
-
-//void deplacementPirate(Joueur &joueur, Plateau &plateau);
+void initPirate(Joueur &pirate);
+void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
 
 #endif

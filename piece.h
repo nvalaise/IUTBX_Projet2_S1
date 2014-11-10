@@ -18,7 +18,7 @@ Declaration des includes
 
 /***********************************
 Declaration des constantes
-************************************/
+************************************/ 
 
 /***********************************
 Declaration des structures
@@ -27,10 +27,8 @@ struct Piece
 {
 	const int LARGEUR_IMAGE = 61;
 	const int HAUTEUR_IMAGE = 61;
-
 	SDL_Surface* sprite = chargerImage("pieces.png");
 	SDL_Rect image[6];
-
 	int x, y;
 	int valeur;
 	int xMatrice, yMatrice;

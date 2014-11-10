@@ -17,7 +17,7 @@ Declaration des includes
 //fichier interne
 #include "piece.h"
 #include "gestion.h"
-#include "joueur.h"
+
 /***********************************
 Declaration des constantes
 ************************************/
@@ -30,13 +30,12 @@ Declaration des structures
 struct Plateau
 {
 	Piece matrice[NB_BLOCK_HAUTEUR][NB_BLOCK_LARGEUR];
-	Joueur position[NB_BLOCK_HAUTEUR][NB_BLOCK_LARGEUR];
 };
 
 /***********************************
 Declaration des prototype
 ************************************/
-void initPlateau(Plateau &plateau);
-void afficherPlateau(Plateau &plateau, Gestion &jeu);
+void placementPiecesTableau(Plateau &plateau);
+void afficherPiecePlateau(Plateau &plateau, Gestion &jeu);
 
 #endif
