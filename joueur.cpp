@@ -9,7 +9,7 @@ void initPirate(Joueur &pirate)
 
 	pirate.x = pirate.xMatrice * pirate.LARGEUR_IMAGE;
 	pirate.y = pirate.yMatrice * pirate.HAUTEUR_IMAGE;
-	
+
 	pirate.image[0].x = 0;
 	pirate.image[0].y = 0;
 	pirate.image[0].h = pirate.HAUTEUR_IMAGE;
@@ -31,4 +31,15 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate)
 	{
 		appliquerClip(pirate.x, pirate.y, pirate.sprite, jeu.ecran, &pirate.image[1]);
 	}
+
+}
+
+void deplacerPirate(Joueur &pirate, Gestion &jeu ,int numeroPirate)
+{
+    pirate.xMatrice = jeu.xSouris / pirate.LARGEUR_IMAGE;
+    pirate.yMatrice = jeu.ySouris / pirate.HAUTEUR_IMAGE;
+
+    pirate.x = pirate.xMatrice * pirate.LARGEUR_IMAGE;
+	pirate.y = pirate.yMatrice * pirate.HAUTEUR_IMAGE;
+
 }

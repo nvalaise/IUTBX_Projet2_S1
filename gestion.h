@@ -34,6 +34,8 @@ struct Gestion
 
 	//quitter le jeu
 	bool quit = false;
+
+	int ySouris, xSouris;
 };
 
 /***********************************
@@ -49,7 +51,5 @@ void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 void appliquerClip(int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip);
 
 void afficheMot(std::string message, int x, int y, int taillePolice, Gestion &jeu, std::string nomPolice);
-
-void appuiTouche(Gestion &jeu);
 
 #endif
