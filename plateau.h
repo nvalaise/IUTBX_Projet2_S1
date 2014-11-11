@@ -38,4 +38,5 @@ Declaration des prototype
 void placementPiecesTableau(Plateau &plateau);
 void afficherPiecePlateau(Plateau &plateau, Gestion &jeu);
 
+
 #endif

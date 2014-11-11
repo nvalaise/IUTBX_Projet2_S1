@@ -7,7 +7,6 @@ void placementPiecesTableau(Plateau &plateau)
 
 	int x = 0;
 	int y = 0;
-	int valeurPiece = 0;
 	int nbPieceDix = 0, nbPieceVingt = 0, nbPieceTrente = 0, nbPieceCinquante = 0, nbPieceCent = 0;
 	srand(time(NULL));
 
@@ -56,7 +55,7 @@ void placementPiecesTableau(Plateau &plateau)
 		y += 61;
 		x = 0;
 	}
-	
+
 	for (int i = 0; i < 50; i++)
 	{
 		int x1 = rand() % 7;
@@ -98,13 +97,13 @@ void placementPiecesTableau(Plateau &plateau)
 		}
 		// on interverti les pieces
 		tmp1 = plateau.matrice[y1][x1].valeur;
-		plateau.matrice[y1][x1].valeur = plateau.matrice[y2][x2].valeur; 
+		plateau.matrice[y1][x1].valeur = plateau.matrice[y2][x2].valeur;
 		plateau.matrice[y2][x2].valeur = tmp1;
 
 		tmp2 = plateau.matrice[y1][x1].xMatrice;
 		plateau.matrice[y1][x1].xMatrice = plateau.matrice[y2][x2].xMatrice;
 		plateau.matrice[y2][x2].xMatrice = tmp2;
-			
+
 		tmp3 = plateau.matrice[y1][x1].yMatrice;
 		plateau.matrice[y1][x1].yMatrice = plateau.matrice[y2][x2].yMatrice;
 		plateau.matrice[y2][x2].yMatrice = tmp3;

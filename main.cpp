@@ -1,5 +1,10 @@
 #include "main.h"
 
+#include "gestion.h"
+#include "piece.h"
+#include "plateau.h"
+#include "joueur.h"
+
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -8,9 +13,14 @@ int main(int argc, char* argv[])
     Gestion jeu;
     Piece unePiece;
     Plateau plateau;
-    Joueur pirate;
+    Joueur premier;
+    Joueur deuxieme;
+    int numeroPirate=0;
+    premier.score=0;
+    deuxieme.score=0;
 
-    initPirate(pirate);
+
+    initPirate(premier, deuxieme);
 
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -41,19 +51,20 @@ int main(int argc, char* argv[])
                 {
                     jeu.xSouris=(jeu.event.motion.x);
                     jeu.ySouris=(jeu.event.motion.y);
+
+
                 }
             }
-
         }
-
-
 
         //affichage de l'ecran en blanc , supprime donc tout l'ecran
         SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
         afficherPiecePlateau(plateau, jeu);
-        afficherPirate(pirate, jeu, 0);
-        deplacerPirate(pirate, jeu, plateau, 0);
+        afficherPirate(premier, deuxieme, jeu, numeroPirate);
+        deplacerPirate(premier, deuxieme , plateau , jeu , numeroPirate);
+
+
 
         SDL_Flip(jeu.ecran);
 

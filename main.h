@@ -14,10 +14,6 @@ Declaration des includes
 #include <SDL_ttf.h>
 
 //fichier internes
-#include "gestion.h"
-#include "piece.h"
-#include "plateau.h"
-#include "joueur.h"
 
 /***********************************
 Declaration des constantes

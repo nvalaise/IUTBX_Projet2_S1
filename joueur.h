@@ -40,9 +40,12 @@ struct Joueur
 /***********************************
 Declaration des prototype
 ************************************/
-void initPirate(Joueur &pirate);
-void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
+void initPirate(Joueur &prem, Joueur &deux);
 
-void deplacerPirate(Joueur &pirate, Gestion &jeu, Plateau &plateau, int numeroPirate);
+void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numeroPirate);
+
+void deplacerPirate(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numero);
+
+
 
 #endif
