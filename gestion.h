@@ -22,7 +22,7 @@ Declaration des structures
 ************************************/
 struct Gestion
 {
-	const int LARGEUR_ECRAN = 427;
+	const int LARGEUR_ECRAN = 877;
 	const int HAUTEUR_ECRAN = 427;
 	const int BPP_ECRAN = 24;
 

@@ -61,7 +61,7 @@ void afficheMot(string message, int x, int y, int taillePolice, Gestion &jeu, st
 {
     SDL_Surface* mes = NULL;
     TTF_Font* police = NULL;
-    SDL_Color couleurTexte = { 255, 255, 255 };
+    SDL_Color couleurTexte = { 0, 0, 0 };
     police = TTF_OpenFont(nomPolice.c_str(), taillePolice);
     if (police != NULL)
     {

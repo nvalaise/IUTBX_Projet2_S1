@@ -16,9 +16,22 @@ int main(int argc, char* argv[])
     Joueur premier;
     Joueur deuxieme;
 
+	SDL_Surface *dessinPirate = NULL;
+	SDL_Rect unDessinPirate[2];
+	dessinPirate = chargerImageCleCouleur("pirates.png", 0, 255, 255);
+	unDessinPirate[0].x = 0;
+	unDessinPirate[0].y = 0;
+	unDessinPirate[0].h = premier.HAUTEUR_IMAGE;
+	unDessinPirate[0].w = premier.LARGEUR_IMAGE;
+	unDessinPirate[1].x = premier.HAUTEUR_IMAGE;;
+	unDessinPirate[1].y = 0;
+	unDessinPirate[1].h = premier.HAUTEUR_IMAGE;
+	unDessinPirate[1].w = premier.LARGEUR_IMAGE;
+
     int numeroPirate = 0;
 
     initPirate(premier, deuxieme);
+	//initBonus(plateau);
 
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -28,7 +41,7 @@ int main(int argc, char* argv[])
     //creation du titre de la fenetre
     SDL_WM_SetCaption("Treasure Hunt", NULL);
 
-    placementPiecesTableau(plateau);
+    placementPiecesTableau(plateau, unePiece);
 
     //tant qu'on est dans le jeu
     while (!jeu.quit)
@@ -53,13 +66,22 @@ int main(int argc, char* argv[])
             }
         }
 
-
         //affichage de l'ecran en blanc , supprime donc tout l'ecran
         SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
         afficherPiecePlateau(plateau, jeu);
         afficherPirate(premier, deuxieme, jeu, numeroPirate);
         deplacerPirate(premier, deuxieme , plateau , jeu , numeroPirate);
+
+		appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+		appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
+
+		afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+		afficherScore(premier, jeu, 550, 100);
+		
+		afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+		afficherScore(deuxieme, jeu, 750, 100);
+		
 
         SDL_Flip(jeu.ecran);
 
@@ -72,6 +94,8 @@ int main(int argc, char* argv[])
     cleanPiece(unePiece);
 	cleanPirate(premier);
 	cleanPirate(deuxieme);
+	cleanBonus(plateau);
+	SDL_FreeSurface(dessinPirate);
 
     TTF_Quit();
     SDL_Quit();

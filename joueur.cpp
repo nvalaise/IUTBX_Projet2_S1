@@ -139,13 +139,20 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
             premier.bonus=2*premier.bonus;
             premier.nbBonus++;
         }
+		else
+		{
+			premier.nbBonus = 0;
+			premier.bonus = 10;
+		}
 
         //si le max est atteint, on réinitialise le bonus
-        if(premier.nbBonus==4)
+		
+        if(premier.nbBonus > 4)
         {
             premier.nbBonus=0;
             premier.bonus=10;
         }
+		
 
         //la case est enregistré pour la traiter p
         premier.last = plateau.matrice[y][x].valeur;
@@ -165,12 +172,19 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
             deuxieme.bonus=2*deuxieme.bonus;
             deuxieme.nbBonus++;
         }
+		else
+		{
+			deuxieme.nbBonus = 0;
+			deuxieme.bonus = 10;
+		}
 
-        if(deuxieme.nbBonus==4)
+        if(deuxieme.nbBonus > 4)
         {
             deuxieme.nbBonus=0;
             deuxieme.bonus=10;
         }
+
+		
 
         deuxieme.last = plateau.matrice[y][x].valeur;
 
@@ -219,9 +233,18 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
     }
 }
 
-
 void cleanPirate(Joueur &pirate)
 {
     //on efface les images
     SDL_FreeSurface(pirate.sprite);
+}
+
+void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y)
+{
+	ostringstream score;
+
+	score.flush();
+	score << pirate.score;
+
+	afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
 }

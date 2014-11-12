@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void placementPiecesTableau(Plateau &plateau)
+void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 {
 
 	int x = 0;
@@ -50,9 +50,9 @@ void placementPiecesTableau(Plateau &plateau)
 			plateau.matrice[i][j].y = y;
 			plateau.matrice[i][j].xMatrice = j;
 			plateau.matrice[i][j].yMatrice = i;
-			x += 61;
+			x += unePiece.LARGEUR_IMAGE;
 		}
-		y += 61;
+		y += unePiece.HAUTEUR_IMAGE;
 		x = 0;
 	}
 
@@ -166,4 +166,37 @@ void afficherPiecePlateau(Plateau &plateau, Gestion &jeu)
 			}
 		}
 	}
+}
+
+void afficherBonus(Gestion &jeu, Plateau &plateau, int x, int y, int nbBonus)
+{
+	if (nbBonus == 0)
+	{
+		appliquerImage(x, y, plateau.bonus1, jeu.ecran);
+	}
+	else if (nbBonus == 1)
+	{
+		appliquerImage(x, y, plateau.bonus2, jeu.ecran);
+	}
+	else if(nbBonus == 2)
+	{
+		appliquerImage(x, y, plateau.bonus3, jeu.ecran);
+	}
+	else if(nbBonus == 3)
+	{
+		appliquerImage(x, y, plateau.bonus4, jeu.ecran);
+	}
+	else if(nbBonus == 4)
+	{
+		appliquerImage(x, y, plateau.bonus5, jeu.ecran);
+	}
+}
+
+void cleanBonus(Plateau &plateau)
+{
+	SDL_FreeSurface(plateau.bonus1);
+	SDL_FreeSurface(plateau.bonus2);
+	SDL_FreeSurface(plateau.bonus3);
+	SDL_FreeSurface(plateau.bonus4);
+	SDL_FreeSurface(plateau.bonus5);
 }

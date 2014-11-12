@@ -7,6 +7,7 @@ Declaration des includes
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <sstream>
 
 //declaration de la SDL
 #include <SDL/SDL.h>
@@ -54,5 +55,7 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
 void victoire(Joueur &premier, Joueur &deuxieme, Gestion & jeu, Plateau &plateau , int numJoueur);
 
 void cleanPirate(Joueur &pirate);
+
+void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y);
 
 #endif
