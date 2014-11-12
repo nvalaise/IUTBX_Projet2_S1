@@ -34,7 +34,7 @@ struct Joueur
 
 	int x, y;
 	int xMatrice, yMatrice;
-	int score;
+	int score = 0;
 };
 
 /***********************************
@@ -46,6 +46,6 @@ void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numeroPirate);
 
 void deplacerPirate(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numero);
 
-
+void cleanPirate(Joueur &pirate);
 
 #endif

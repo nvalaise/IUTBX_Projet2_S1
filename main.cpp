@@ -15,10 +15,8 @@ int main(int argc, char* argv[])
     Plateau plateau;
     Joueur premier;
     Joueur deuxieme;
-    int numeroPirate=0;
-    premier.score=0;
-    deuxieme.score=0;
 
+    int numeroPirate = 0;
 
     initPirate(premier, deuxieme);
 
@@ -51,8 +49,6 @@ int main(int argc, char* argv[])
                 {
                     jeu.xSouris=(jeu.event.motion.x);
                     jeu.ySouris=(jeu.event.motion.y);
-
-
                 }
             }
         }
@@ -64,8 +60,6 @@ int main(int argc, char* argv[])
         afficherPirate(premier, deuxieme, jeu, numeroPirate);
         deplacerPirate(premier, deuxieme , plateau , jeu , numeroPirate);
 
-
-
         SDL_Flip(jeu.ecran);
 
         SDL_Delay(10);
@@ -75,6 +69,8 @@ int main(int argc, char* argv[])
     SDL_FreeSurface(jeu.ecran);
 
     cleanPiece(unePiece);
+	cleanPirate(premier);
+	cleanPirate(deuxieme);
 
     TTF_Quit();
     SDL_Quit();
