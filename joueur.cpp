@@ -73,47 +73,50 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
     int x2 = jeu.xSouris / premier.LARGEUR_IMAGE;
     int y2 = jeu.ySouris / premier.HAUTEUR_IMAGE;
 
-    //si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
-    if(((x1 == premier.xMatrice) || (y1 == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y1][x1].valeur != 0))
-    {
-        //sélection de la case
-        premier.xMatrice = x1;
-        premier.yMatrice = y1;
+	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
+	{
+		//si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
+		if (((x1 == premier.xMatrice) || (y1 == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y1][x1].valeur != 0))
+		{
+			//sélection de la case
+			premier.xMatrice = x1;
+			premier.yMatrice = y1;
 
-        //on met à jour le score
-        score(premier, deuxieme, jeu, plateau, numeroPirate);
+			//on met à jour le score
+			score(premier, deuxieme, jeu, plateau, numeroPirate);
 
-        //on enlève la case
-        plateau.matrice[y1][x1].valeur = 0;
+			//on enlève la case
+			plateau.matrice[y1][x1].valeur = 0;
 
-        //on veut que l'autre joueur démarre d'où le joueur précédent à cliqué
-        deuxieme.xMatrice = premier.xMatrice;
-        deuxieme.yMatrice = premier.yMatrice;
+			//on veut que l'autre joueur démarre d'où le joueur précédent à cliqué
+			deuxieme.xMatrice = premier.xMatrice;
+			deuxieme.yMatrice = premier.yMatrice;
 
-        //on prévoit de changer de personnage
-        numeroPirate = 1;
+			//on prévoit de changer de personnage
+			numeroPirate = 1;
 
-        //cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
-    }
-    //si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
-    else if(((x2 == deuxieme.xMatrice) || (y2 == deuxieme.yMatrice)) && (numeroPirate == 1) && (plateau.matrice[y2][x2].valeur != 0))
-    {
-        //pareil que précédemment
-        deuxieme.xMatrice = x2;
-        deuxieme.yMatrice = y2;
+			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
+		}
+		//si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
+		else if (((x2 == deuxieme.xMatrice) || (y2 == deuxieme.yMatrice)) && (numeroPirate == 1) && (plateau.matrice[y2][x2].valeur != 0))
+		{
+			//pareil que précédemment
+			deuxieme.xMatrice = x2;
+			deuxieme.yMatrice = y2;
 
-        score(premier, deuxieme, jeu, plateau, numeroPirate);
+			score(premier, deuxieme, jeu, plateau, numeroPirate);
 
-        plateau.matrice[y2][x2].valeur = 0;
+			plateau.matrice[y2][x2].valeur = 0;
 
 
-        premier.xMatrice = deuxieme.xMatrice;
-        premier.yMatrice = deuxieme.yMatrice;
+			premier.xMatrice = deuxieme.xMatrice;
+			premier.yMatrice = deuxieme.yMatrice;
 
-        numeroPirate = 0;
+			numeroPirate = 0;
 
-        //cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
-    }
+			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
+		}
+	}    
 }
 
 void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur)
@@ -152,7 +155,6 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
             premier.nbBonus=0;
             premier.bonus=10;
         }
-		
 
         //la case est enregistré pour la traiter p
         premier.last = plateau.matrice[y][x].valeur;
