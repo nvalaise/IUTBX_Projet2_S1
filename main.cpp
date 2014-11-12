@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 	imageBouton[2].y = 0;
 	imageBouton[2].h = jeu.HAUTEUR_BOUTON;
 	imageBouton[2].w = jeu.LARGEUR_BOUTON;
-	
+
 
     initPirate(premier, deuxieme);
 
@@ -95,28 +95,57 @@ int main(int argc, char* argv[])
 
 			if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 100 && jeu.ySouris < 100 + jeu.HAUTEUR_BOUTON)
 			{
-				jeu.menu = false;
+                jeu.menu = false;
+				jeu.solo = true;
 			}
 			else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 200 && jeu.ySouris < 200 + jeu.HAUTEUR_BOUTON)
 			{
+
 				jeu.menu = false;
+				jeu.duo = true;
 			}
 			else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 300 && jeu.ySouris < 300 + jeu.HAUTEUR_BOUTON)
 			{
+                jeu.solo = false;
+                jeu.duo = false;
+                jeu.menu = false;
 				jeu.quit = true;
 			}
 
 			SDL_Flip(jeu.ecran);
 			SDL_Delay(10);
 		}
-		else
+		else if(jeu.solo)
 		{
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
 			afficherPiecePlateau(plateau, jeu);
 			afficherPirate(premier, deuxieme, jeu, numeroPirate);
-			deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate);
+			deplacerPirateSolo(premier, deuxieme, plateau, jeu, numeroPirate);
+
+			appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+			appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
+
+			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+			afficherScore(premier, jeu, 550, 100);
+
+			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+			afficherScore(deuxieme, jeu, 750, 100);
+
+			SDL_Flip(jeu.ecran);
+
+			SDL_Delay(10);
+		}
+
+		else if(jeu.duo)
+		{
+			//affichage de l'ecran en blanc , supprime donc tout l'ecran
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+
+			afficherPiecePlateau(plateau, jeu);
+			afficherPirate(premier, deuxieme, jeu, numeroPirate);
+			deplacerPirateDuo(premier, deuxieme, plateau, jeu, numeroPirate);
 
 			appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
 			appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);

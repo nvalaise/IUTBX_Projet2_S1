@@ -64,14 +64,24 @@ void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroP
   - la gestion pour la gestion des events souris
   - le numéro du joueur pour alterner
 ***********************************************/
-void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
+void deplacerPirateDuo(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
 {
 
     int x1 = jeu.xSouris / premier.LARGEUR_IMAGE;
     int y1 = jeu.ySouris / premier.HAUTEUR_IMAGE;
 
-    int x2 = jeu.xSouris / premier.LARGEUR_IMAGE;
-    int y2 = jeu.ySouris / premier.HAUTEUR_IMAGE;
+
+    int x2 = jeu.xSouris / deuxieme.LARGEUR_IMAGE;
+    int y2 = jeu.ySouris / deuxieme.HAUTEUR_IMAGE;
+
+    /*****
+    Un exemple :
+    si la souris a cliqué en 287, x1vaudra 287/61 = 4
+
+    De plus, que l'on mette premier.LARG... ou deuxieme.LARG,
+    cela revient au même car ces constances sont contenu
+    dans la structure Joueur
+    *****/
 
 	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
 	{
@@ -116,19 +126,99 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
 
 			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
 		}
-	}    
+	}
+}
+
+void deplacerPirateSolo(Joueur &premier,Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
+{
+
+    int maximum = 0;
+
+    int x = jeu.xSouris / premier.LARGEUR_IMAGE;
+    int y = jeu.ySouris / premier.HAUTEUR_IMAGE;
+
+    int xia = 0;
+    int yia = 0;
+
+
+	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
+	{
+		//si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
+		if (((x == premier.xMatrice) || (y == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y][x].valeur != 0))
+		{
+			//sélection de la case
+			premier.xMatrice = x;
+			premier.yMatrice = y;
+
+			//on met à jour le score
+			score(premier, deuxieme, jeu, plateau, numeroPirate);
+
+			//on enlève la case
+			plateau.matrice[y][x].valeur = 0;
+
+			//on veut que l'autre joueur démarre d'où le joueur précédent à cliqué
+			deuxieme.xMatrice = premier.xMatrice;
+			deuxieme.yMatrice = premier.yMatrice;
+
+
+			//on prévoit de changer de personnage
+			numeroPirate = 1;
+
+			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
+		}
+		//si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
+		else if ((numeroPirate == 1) && (plateau.matrice[yia][xia].valeur != 0))
+		{
+            for(int i=0; i<7; i++)
+            {
+                if(plateau.matrice[i][deuxieme.xMatrice].valeur>=maximum)
+                {
+                    maximum = plateau.matrice[i][deuxieme.xMatrice].valeur;
+                    yia = i;
+                    xia = deuxieme.xMatrice;
+                }
+            }
+
+            for(int i=0; i<7; i++)
+            {
+                if(plateau.matrice[deuxieme.yMatrice][i].valeur>=maximum)
+                {
+                    maximum=plateau.matrice[deuxieme.yMatrice][i].valeur;
+                    xia = i;
+                    yia = deuxieme.yMatrice;
+                }
+            }
+
+			//pareil que précédemment
+			deuxieme.xMatrice = xia;
+			deuxieme.yMatrice = yia;
+
+			score(premier, deuxieme, jeu, plateau, numeroPirate);
+
+			plateau.matrice[yia][xia].valeur = 0;
+
+
+			premier.xMatrice = deuxieme.xMatrice;
+			premier.yMatrice = deuxieme.yMatrice;
+
+			numeroPirate = 0;
+
+			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
+		}
+	}
 }
 
 void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur)
 {
 
-    int x = jeu.xSouris / premier.LARGEUR_IMAGE;
-    int y = jeu.ySouris / premier.HAUTEUR_IMAGE;
+int x, y;
 
     //gestion des scores en fonction du joueur en cours
     switch(numJoueur)
     {
     case 0:
+        x = premier.xMatrice;
+        y = premier.yMatrice;
         //son score = score précédent + valeur de la pièce
         premier.score += plateau.matrice[y][x].valeur;
 
@@ -149,7 +239,7 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
 		}
 
         //si le max est atteint, on réinitialise le bonus
-		
+
         if(premier.nbBonus > 4)
         {
             premier.nbBonus=0;
@@ -165,6 +255,10 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
 
     //on reprend le même code
     case 1:
+
+        x = deuxieme.xMatrice;
+        y = deuxieme.yMatrice;
+
         deuxieme.score += plateau.matrice[y][x].valeur;
 
         if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
@@ -266,7 +360,7 @@ void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate
 	{
 		appliquerImage(x, y, pirate.imageGagnantRouge, jeu.ecran);
 	}
-	
+
 }
 
 void cleanImageGagnant(Joueur &pirate)

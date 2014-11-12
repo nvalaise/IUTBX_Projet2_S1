@@ -51,7 +51,9 @@ void initPirate(Joueur &prem, Joueur &deux);
 
 void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numJoueur);
 
-void deplacerPirate(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numJoueur);
+void deplacerPirateDuo(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numJoueur);
+
+void deplacerPirateSolo(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numJoueur);
 
 void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur);
 

@@ -38,6 +38,8 @@ struct Gestion
 	//quitter le jeu
 	bool quit = false;
 	bool menu = true;
+	bool solo = false;
+	bool duo = false;
 
 	int ySouris, xSouris;
 };
