@@ -41,3 +41,23 @@ IUTBX_Projet2_S1
 5. gestion des bonus
 
 6. (créer une IA)
+
+Répartition globale des taches
+
+**Nicolas :**
+
+Comptez les points avec bonus
+
+Dire quand le pirate a gagné ou perdu
+
+IA
+
+**Maxime :**
+
+Menu
+
+Affichage score et bonus
+
+Gestion déplacement pirate (il marche)
+
+Changer thème jeu
