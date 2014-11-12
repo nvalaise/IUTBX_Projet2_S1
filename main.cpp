@@ -53,6 +53,7 @@ int main(int argc, char* argv[])
             }
         }
 
+
         //affichage de l'ecran en blanc , supprime donc tout l'ecran
         SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 

@@ -35,6 +35,9 @@ struct Joueur
 	int x, y;
 	int xMatrice, yMatrice;
 	int score = 0;
+	int bonus=10;
+	int nbBonus=0;
+	int last = 0;
 };
 
 /***********************************
@@ -42,9 +45,13 @@ Declaration des prototype
 ************************************/
 void initPirate(Joueur &prem, Joueur &deux);
 
-void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numeroPirate);
+void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numJoueur);
 
-void deplacerPirate(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numero);
+void deplacerPirate(Joueur &prem, Joueur &deux, Plateau &plateau, Gestion &jeu, int &numJoueur);
+
+void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur);
+
+void victoire(Joueur &premier, Joueur &deuxieme, Gestion & jeu, Plateau &plateau , int numJoueur);
 
 void cleanPirate(Joueur &pirate);
 
