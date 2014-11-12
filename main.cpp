@@ -30,8 +30,27 @@ int main(int argc, char* argv[])
 
     int numeroPirate = 0;
 
+	SDL_Surface* menu = chargerImage("menu.bmp");
+	SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
+	SDL_Rect imageBouton[3];
+	imageBouton[0].x = 0;
+	imageBouton[0].y = 0;
+	imageBouton[0].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[0].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[1].x = jeu.LARGEUR_BOUTON;
+	imageBouton[1].y = 0;
+	imageBouton[1].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[1].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[2].x = jeu.LARGEUR_BOUTON * 2;
+	imageBouton[2].y = 0;
+	imageBouton[2].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[2].w = jeu.LARGEUR_BOUTON;
+	
+
     initPirate(premier, deuxieme);
-	//initBonus(plateau);
+
 
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -66,26 +85,52 @@ int main(int argc, char* argv[])
             }
         }
 
-        //affichage de l'ecran en blanc , supprime donc tout l'ecran
-        SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+		if (jeu.menu)
+		{
+			appliquerImage(0, 0, menu, jeu.ecran);
 
-        afficherPiecePlateau(plateau, jeu);
-        afficherPirate(premier, deuxieme, jeu, numeroPirate);
-        deplacerPirate(premier, deuxieme , plateau , jeu , numeroPirate);
+			appliquerClip(600, 100, bouton, jeu.ecran, &imageBouton[0]);
+			appliquerClip(600, 200, bouton, jeu.ecran, &imageBouton[1]);
+			appliquerClip(600, 300, bouton, jeu.ecran, &imageBouton[2]);
 
-		appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-		appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
+			if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 100 && jeu.ySouris < 100 + jeu.HAUTEUR_BOUTON)
+			{
+				jeu.menu = false;
+			}
+			else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 200 && jeu.ySouris < 200 + jeu.HAUTEUR_BOUTON)
+			{
+				jeu.menu = false;
+			}
+			else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 300 && jeu.ySouris < 300 + jeu.HAUTEUR_BOUTON)
+			{
+				jeu.quit = true;
+			}
 
-		afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-		afficherScore(premier, jeu, 550, 100);
-		
-		afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-		afficherScore(deuxieme, jeu, 750, 100);
-		
+			SDL_Flip(jeu.ecran);
+			SDL_Delay(10);
+		}
+		else
+		{
+			//affichage de l'ecran en blanc , supprime donc tout l'ecran
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
-        SDL_Flip(jeu.ecran);
+			afficherPiecePlateau(plateau, jeu);
+			afficherPirate(premier, deuxieme, jeu, numeroPirate);
+			deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate);
 
-        SDL_Delay(10);
+			appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+			appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
+
+			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+			afficherScore(premier, jeu, 550, 100);
+
+			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+			afficherScore(deuxieme, jeu, 750, 100);
+
+			SDL_Flip(jeu.ecran);
+
+			SDL_Delay(10);
+		}
     }
 
     //on supprime toutes les images
@@ -95,7 +140,10 @@ int main(int argc, char* argv[])
 	cleanPirate(premier);
 	cleanPirate(deuxieme);
 	cleanBonus(plateau);
+	cleanImageGagnant(premier);
 	SDL_FreeSurface(dessinPirate);
+	SDL_FreeSurface(menu);
+	SDL_FreeSurface(bouton);
 
     TTF_Quit();
     SDL_Quit();

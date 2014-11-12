@@ -26,6 +26,9 @@ struct Gestion
 	const int HAUTEUR_ECRAN = 427;
 	const int BPP_ECRAN = 24;
 
+	const int LARGEUR_BOUTON = 235;
+	const int HAUTEUR_BOUTON = 59;
+
 	SDL_Surface* ecran = NULL;
 	SDL_Event event;
 
@@ -34,6 +37,7 @@ struct Gestion
 
 	//quitter le jeu
 	bool quit = false;
+	bool menu = true;
 
 	int ySouris, xSouris;
 };

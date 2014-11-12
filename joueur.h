@@ -33,6 +33,9 @@ struct Joueur
 	SDL_Surface* sprite = chargerImageCleCouleur("pirates.png", 0, 255, 255);
 	SDL_Rect image[2];
 
+	SDL_Surface* imageGagnantVert = chargerImage("gagne1.bmp");
+	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.bmp");
+
 	int x, y;
 	int xMatrice, yMatrice;
 	int score = 0;
@@ -57,5 +60,9 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion & jeu, Plateau &plateau
 void cleanPirate(Joueur &pirate);
 
 void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y);
+
+void cleanImageGagnant(Joueur &pirate);
+
+void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
 
 #endif

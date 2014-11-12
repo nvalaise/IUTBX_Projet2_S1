@@ -183,9 +183,6 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
             deuxieme.nbBonus=0;
             deuxieme.bonus=10;
         }
-
-		
-
         deuxieme.last = plateau.matrice[y][x].valeur;
 
         victoire(premier, deuxieme,  jeu, plateau, numJoueur);
@@ -221,15 +218,23 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
     if((numJoueur==0) && ((premier.score>500) || (nbZero==12)))
     {
         //encore pleins de fonction à appliquer
-        cout << "Le joueur 1 a gagné ... " << endl ;
-        jeu.quit = true ;
+        cout << "Le joueur 1 a gagné ... " << endl;
+		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+		afficheGagnant(premier, jeu, 240, 13, 0);
+		SDL_Flip(jeu.ecran);
+		SDL_Delay(2000);
+        jeu.quit = true;
     }
 
     //pour le joueur 2, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
     if((numJoueur==1) && ((deuxieme.score>500) || (nbZero==12)))
     {
-        cout << "Le joueur 2 a gagné ... " << endl ;
-        jeu.quit = true ;
+        cout << "Le joueur 2 a gagné ... " << endl;
+		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+		afficheGagnant(deuxieme, jeu, 240, 13, 0);
+		SDL_Flip(jeu.ecran);
+		SDL_Delay(2000);
+        jeu.quit = true;
     }
 }
 
@@ -247,4 +252,23 @@ void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y)
 	score << pirate.score;
 
 	afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+}
+
+void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate)
+{
+	if (numeroPirate == 0)
+	{
+		appliquerImage(x, y, pirate.imageGagnantVert, jeu.ecran);
+	}
+	else if (numeroPirate == 1)
+	{
+		appliquerImage(x, y, pirate.imageGagnantRouge, jeu.ecran);
+	}
+	
+}
+
+void cleanImageGagnant(Joueur &pirate)
+{
+	SDL_FreeSurface(pirate.imageGagnantRouge);
+	SDL_FreeSurface(pirate.imageGagnantVert);
 }
