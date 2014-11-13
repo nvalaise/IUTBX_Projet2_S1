@@ -64,7 +64,7 @@ void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroP
   - la gestion pour la gestion des events souris
   - le numéro du joueur pour alterner
 ***********************************************/
-void deplacerPirateDuo(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
+void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
 {
 
     int x1 = jeu.xSouris / premier.LARGEUR_IMAGE;
@@ -73,6 +73,10 @@ void deplacerPirateDuo(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Ges
 
     int x2 = jeu.xSouris / deuxieme.LARGEUR_IMAGE;
     int y2 = jeu.ySouris / deuxieme.HAUTEUR_IMAGE;
+
+    int maximum = 0;
+    int xia = 3 ;
+    int yia = 3 ;
 
     /*****
     Un exemple :
@@ -103,7 +107,10 @@ void deplacerPirateDuo(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Ges
 			deuxieme.yMatrice = premier.yMatrice;
 
 			//on prévoit de changer de personnage
+			if (jeu.duo)
 			numeroPirate = 1;
+			else if (jeu.solo)
+			numeroPirate = 2;
 
 			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
 		}
@@ -126,19 +133,53 @@ void deplacerPirateDuo(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Ges
 
 			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
 		}
+
+		//déplacement de l'ia
+		else if (numeroPirate == 2)
+		{
+            for(int i=0; i<7; i++)
+            {
+                if(plateau.matrice[i][deuxieme.xMatrice].valeur>maximum)
+                {
+                    maximum = plateau.matrice[i][deuxieme.xMatrice].valeur;
+                    yia = i;
+                    xia = deuxieme.xMatrice;
+                }
+            }
+
+
+            for(int i=0; i<7; i++)
+            {
+                if(plateau.matrice[deuxieme.yMatrice][i].valeur>maximum)
+                {
+                    maximum=plateau.matrice[deuxieme.yMatrice][i].valeur;
+                    xia = i;
+                    yia = deuxieme.yMatrice;
+                }
+            }
+			//pareil que précédemment
+			deuxieme.xMatrice = xia;
+			deuxieme.yMatrice = yia;
+
+			score(premier, deuxieme, jeu, plateau, numeroPirate);
+
+			plateau.matrice[yia][xia].valeur = 0;
+
+
+			premier.xMatrice = deuxieme.xMatrice;
+			premier.yMatrice = deuxieme.yMatrice;
+
+			numeroPirate = 0;
+
+			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
+		}
 	}
 }
 
+/*
 void deplacerPirateSolo(Joueur &premier,Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
 {
 
-    int maximum = 0;
-
-    int x = jeu.xSouris / premier.LARGEUR_IMAGE;
-    int y = jeu.ySouris / premier.HAUTEUR_IMAGE;
-
-    int xia = 0;
-    int yia = 0;
 
 
 	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
@@ -166,12 +207,13 @@ void deplacerPirateSolo(Joueur &premier,Joueur &deuxieme , Plateau &plateau ,Ges
 
 			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
 		}
+
 		//si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
-		else if ((numeroPirate == 1) && (plateau.matrice[yia][xia].valeur != 0))
+		else if (numeroPirate == 1)
 		{
             for(int i=0; i<7; i++)
             {
-                if(plateau.matrice[i][deuxieme.xMatrice].valeur>=maximum)
+                if(plateau.matrice[i][deuxieme.xMatrice].valeur>maximum)
                 {
                     maximum = plateau.matrice[i][deuxieme.xMatrice].valeur;
                     yia = i;
@@ -179,16 +221,16 @@ void deplacerPirateSolo(Joueur &premier,Joueur &deuxieme , Plateau &plateau ,Ges
                 }
             }
 
+
             for(int i=0; i<7; i++)
             {
-                if(plateau.matrice[deuxieme.yMatrice][i].valeur>=maximum)
+                if(plateau.matrice[deuxieme.yMatrice][i].valeur>maximum)
                 {
                     maximum=plateau.matrice[deuxieme.yMatrice][i].valeur;
                     xia = i;
                     yia = deuxieme.yMatrice;
                 }
             }
-
 			//pareil que précédemment
 			deuxieme.xMatrice = xia;
 			deuxieme.yMatrice = yia;
@@ -206,7 +248,7 @@ void deplacerPirateSolo(Joueur &premier,Joueur &deuxieme , Plateau &plateau ,Ges
 			//cout << "j1:" << premier.score << " j2:"<< deuxieme.score << endl ;
 		}
 	}
-}
+}*/
 
 void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur)
 {
@@ -253,8 +295,39 @@ int x, y;
         victoire(premier, deuxieme,  jeu, plateau, numJoueur);
         break;
 
-    //on reprend le même code
+    //on reprend le même code si on joue à deux
     case 1:
+
+        x = deuxieme.xMatrice;
+        y = deuxieme.yMatrice;
+
+        deuxieme.score += plateau.matrice[y][x].valeur;
+
+        if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
+        {
+            //cout << "le bonus est de " << deuxieme.bonus << endl ;
+            deuxieme.score += deuxieme.bonus;
+            deuxieme.bonus=2*deuxieme.bonus;
+            deuxieme.nbBonus++;
+        }
+		else
+		{
+			deuxieme.nbBonus = 0;
+			deuxieme.bonus = 10;
+		}
+
+        if(deuxieme.nbBonus > 4)
+        {
+            deuxieme.nbBonus=0;
+            deuxieme.bonus=10;
+        }
+        deuxieme.last = plateau.matrice[y][x].valeur;
+
+        victoire(premier, deuxieme,  jeu, plateau, numJoueur);
+        break;
+
+    //si on joue contre l'ia
+    case 2:
 
         x = deuxieme.xMatrice;
         y = deuxieme.yMatrice;
@@ -314,23 +387,34 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
     if((numJoueur==0) && ((premier.score>500) || (nbZero==12)))
     {
         //encore pleins de fonction à appliquer
-        cout << "Le joueur 1 a gagné ... " << endl;
 		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 		afficheGagnant(premier, jeu, 240, 13, 0);
 		SDL_Flip(jeu.ecran);
 		SDL_Delay(2000);
         jeu.quit = true;
+        //jeu.menu = true;
     }
 
     //pour le joueur 2, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
     if((numJoueur==1) && ((deuxieme.score>500) || (nbZero==12)))
     {
-        cout << "Le joueur 2 a gagné ... " << endl;
 		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-		afficheGagnant(deuxieme, jeu, 240, 13, 0);
+		afficheGagnant(deuxieme, jeu, 240, 13, 1);
 		SDL_Flip(jeu.ecran);
 		SDL_Delay(2000);
         jeu.quit = true;
+        //jeu.menu = true;
+    }
+
+    //pour l'ia, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
+    if((numJoueur==2) && ((deuxieme.score>500) || (nbZero==12)))
+    {
+		SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+		afficheGagnant(deuxieme, jeu, 240, 13, 1);
+		SDL_Flip(jeu.ecran);
+		SDL_Delay(2000);
+        jeu.quit = true;
+        //jeu.menu = true;
     }
 }
 
