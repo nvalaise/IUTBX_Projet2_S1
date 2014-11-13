@@ -74,12 +74,18 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
     int x2 = jeu.xSouris / deuxieme.LARGEUR_IMAGE;
     int y2 = jeu.ySouris / deuxieme.HAUTEUR_IMAGE;
 
-    int maximum = 0;
+    int maximum = 10;
     int xia = 3 ;
     int yia = 3 ;
-    int alternative = 0;
-    int xaltern =0;
-    int yaltern =0;
+
+    int xmax = 3 ;
+    int ymax= 3 ;
+
+    int alternative = 5;
+    int xaltern1 =3;
+    int yaltern1 =3;
+    int xaltern2 =3;
+    int yaltern2 =3;
 
     /*****
     Un exemple :
@@ -145,8 +151,6 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
         //déplacement de l'ia
         else if (numeroPirate == 2)
         {
-            bool presentSurLaLigneOuPas=true;
-
             //on teste la ligne sur laquelle est arrivé le joueur 1
             for(int i=0; i<7; i++)
             {
@@ -155,28 +159,26 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
                 {
                     //et si elle existe on prend sa valeur et ses coordonnées
                     maximum = plateau.matrice[i][deuxieme.xMatrice].valeur;
-                    yia = i;
-                    xia = deuxieme.xMatrice;
-                }
-
-                //génération d'un valeure alternative par défaut, la plus grand possible
-                else if((plateau.matrice[i][deuxieme.xMatrice].valeur>=alternative) && (xia!=xaltern) && (yia != yaltern))
-                {
-
-                    alternative = plateau.matrice[i][deuxieme.xMatrice].valeur;
-                    yaltern = i;
-                    xaltern = deuxieme.xMatrice;
-
+                    ymax = i;
+                    xmax = deuxieme.xMatrice;
                 }
 
                 //et si la case précedente st plus grand on prend ses caractéristiques
-                else if(alternative < deuxieme.last)
+                else if(((plateau.matrice[i][deuxieme.xMatrice].valeur == deuxieme.last) || (plateau.matrice[i][deuxieme.xMatrice].valeur >= alternative))
+                        && (xia!=xaltern1) && (yia != yaltern1) && (xia!=xaltern2) && (yia != yaltern2))
                 {
-                    alternative = plateau.matrice[i][deuxieme.xMatrice].valeur;
-                    yaltern = i;
-                    xaltern = deuxieme.xMatrice;
+                    if(plateau.matrice[i][deuxieme.xMatrice].valeur>alternative)
+                    {
+                        plateau.matrice[i][deuxieme.xMatrice].valeur = alternative;
+                        yaltern1 = i;
+                        xaltern1 = deuxieme.xMatrice;
+                    }
+                    if(plateau.matrice[i][deuxieme.xMatrice].valeur == deuxieme.last)
+                    {
+                        yaltern2 = i;
+                        xaltern2 = deuxieme.xMatrice;
+                    }
                 }
-
             }
 
             //maintenant on test la colonne sur laquelle le joueur 1 est arrivé
@@ -186,56 +188,46 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
                 if(plateau.matrice[deuxieme.yMatrice][i].valeur>maximum)
                 {
                     maximum=plateau.matrice[deuxieme.yMatrice][i].valeur;
-                    xia = i;
-                    yia = deuxieme.yMatrice;
-                    presentSurLaLigneOuPas=false;
+                    xmax = i;
+                    ymax = deuxieme.yMatrice;
                     //au dessus on dit que le le maximum est présent sur la colonne
                 }
 
-                if((plateau.matrice[deuxieme.yMatrice][i].valeur>=alternative) && (xia!=xaltern) && (yia != yaltern))
+                else if(((plateau.matrice[deuxieme.yMatrice][i].valeur == deuxieme.last) || (plateau.matrice[deuxieme.yMatrice][i].valeur>=alternative))
+                        && (xia!=xaltern1) && (yia != yaltern1) && (xia!=xaltern2) && (yia != yaltern2) )
                 {
-                    alternative = plateau.matrice[deuxieme.yMatrice][i].valeur;
-                    xaltern = i;
-                    yaltern = deuxieme.yMatrice;
-                    presentSurLaLigneOuPas=false;
-                }
-
-                else if(alternative < deuxieme.last)
-                {
-                    alternative = plateau.matrice[deuxieme.yMatrice][i].valeur;
-                    xaltern = i;
-                    yaltern = deuxieme.yMatrice;
-                    presentSurLaLigneOuPas=false;
-                }
-            }
-
-            //si le maximum est présent sur la ligne
-            if(!presentSurLaLigneOuPas)
-            {
-                for(int i=0; i<7 ; i++)
-                {
-                    //on vérifie de ne pas faire de cadeaux trop simple au joueur 1
-                    if(plateau.matrice[i][xia].valeur > maximum)
+                    if (plateau.matrice[deuxieme.yMatrice][i].valeur > alternative)
                     {
-                        //sinon on chnage les coordonnées
-                        yia=yaltern;
-                        xia=xaltern;
+                        alternative = plateau.matrice[deuxieme.yMatrice][i].valeur;
+                        xaltern1 = i;
+                        yaltern1 = deuxieme.yMatrice;
+                    }
+                    if (plateau.matrice[deuxieme.yMatrice][i].valeur == deuxieme.last)
+                    {
+                        xaltern2 = i;
+                        yaltern2 = deuxieme.yMatrice;
                     }
                 }
             }
 
-            //si le maximum est présent sur la colonne
+            if(plateau.matrice[ymax][xmax].valeur >= maximum)
+            {
+                //on a fait les mêmes vérifications qu'avant
+                yia=yaltern1;
+                xia=xaltern1;
+            }
+
+            if(plateau.matrice[yaltern1][yaltern1].valeur >= maximum)
+            {
+                //on a fait les mêmes vérifications qu'avant
+                yia=yaltern2;
+                xia=xaltern2;
+            }
+
             else
             {
-                for(int j=0; j<7 ; j++)
-                {
-                    if(plateau.matrice[yia][j].valeur > maximum)
-                    {
-                        //on a fait les mêmes vérifications qu'avant
-                        yia=yaltern;
-                        xia=xaltern;
-                    }
-                }
+                yia = ymax;
+                xia = xmax;
             }
 
 
