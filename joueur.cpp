@@ -111,9 +111,17 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
         //si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
         if (((x1 == premier.xMatrice) || (y1 == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y1][x1].valeur != 0))
         {
+            cout << "x1 : " << x1  << endl;
+            cout << "x2 : " << x2  << endl;
+
+
             //sélection de la case
             premier.xMatrice = x1;
             premier.yMatrice = y1;
+
+            cout << "premier.yMatrice : " << premier.yMatrice << endl;
+            cout << "premier.xMatrice : " << premier.xMatrice << endl ;
+
 
             //on met à jour le score
             score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);

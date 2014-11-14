@@ -78,16 +78,6 @@ int main(int argc, char* argv[])
                 {
                     jeu.xSouris=(jeu.event.motion.x);
                     jeu.ySouris=(jeu.event.motion.y);
-                    for(int y = 0; y < 7; y++)
-                    {
-                        for(int x = 0; x < 7; x++)
-                        {
-                            cout << plateau.matrice[y][x].valeur << " ";
-
-                        }
-                        cout << endl;
-                    }
-                    cout << endl;
                 }
             }
         }
