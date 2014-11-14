@@ -9,6 +9,7 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+
     Gestion jeu;
     Piece unePiece;
     Plateau plateau;
@@ -49,10 +50,6 @@ int main(int argc, char* argv[])
     imageBouton[2].h = jeu.HAUTEUR_BOUTON;
     imageBouton[2].w = jeu.LARGEUR_BOUTON;
 
-
-
-
-
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
     TTF_Init();
@@ -81,25 +78,33 @@ int main(int argc, char* argv[])
                 {
                     jeu.xSouris=(jeu.event.motion.x);
                     jeu.ySouris=(jeu.event.motion.y);
+                    for(int y = 0; y < 7; y++)
+                    {
+                        for(int x = 0; x < 7; x++)
+                        {
+                            cout << plateau.matrice[y][x].valeur << " ";
+
+                        }
+                        cout << endl;
+                    }
+                    cout << endl;
                 }
             }
         }
 
         if (jeu.menu)
         {
-            if (jeu.once)
-            {
-                /****** Prévision si on jeu revenir au menu après ********/
-                numeroPirate = 0;
-                initPirate(premier, deuxieme);
-                placementPiecesTableau(plateau, unePiece);
-                premier.score=0;
-                premier.nbBonus=0;
-                deuxieme.score=0;
-                deuxieme.nbBonus=0;
-                /**********************************************************/
-                jeu.once = false;
-            }
+
+            /****** Prévision si on jeu revenir au menu après ********
+            int numeroPirate = 0;
+            initPirate(premier, deuxieme);
+            placementPiecesTableau(plateau, unePiece);
+            premier.score=0;
+            premier.nbBonus=0;
+            deuxieme.score=0;
+            deuxieme.nbBonus=0;
+            **********************************************************/
+
             appliquerImage(0, 0, menu, jeu.ecran);
             appliquerClip(600, 100, bouton, jeu.ecran, &imageBouton[0]);
             appliquerClip(600, 200, bouton, jeu.ecran, &imageBouton[1]);
@@ -136,7 +141,7 @@ int main(int argc, char* argv[])
 
             afficherPiecePlateau(plateau, jeu);
             afficherPirate(premier, deuxieme, jeu, numeroPirate);
-            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate);
+            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate, unePiece);
 
             appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
             appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
@@ -159,7 +164,7 @@ int main(int argc, char* argv[])
 
             afficherPiecePlateau(plateau, jeu);
             afficherPirate(premier, deuxieme, jeu, numeroPirate);
-            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate);
+            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate, unePiece);
 
             appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
             appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);

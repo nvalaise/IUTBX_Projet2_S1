@@ -12,6 +12,17 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
     //initialisation des coordonnées du premier joueur
     premier.xMatrice = 3;
     premier.yMatrice = 3;
+    premier.score = 0;
+    premier.bonus = 0;
+    premier.nbBonus = 0;
+    premier.last = 0;
+
+    deuxieme.xMatrice = 3;
+    deuxieme.yMatrice = 3;
+    deuxieme.score = 0;
+    deuxieme.bonus = 0;
+    deuxieme.nbBonus = 0;
+    deuxieme.last = 0;
 
     //sprite du premier joueur
     premier.image[0].x = 0;
@@ -64,12 +75,10 @@ void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroP
   - la gestion pour la gestion des events souris
   - le numéro du joueur pour alterner
 ***********************************************/
-void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate)
+void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate, Piece &unePiece)
 {
-
     int x1 = jeu.xSouris / premier.LARGEUR_IMAGE;
     int y1 = jeu.ySouris / premier.HAUTEUR_IMAGE;
-
 
     int x2 = jeu.xSouris / deuxieme.LARGEUR_IMAGE;
     int y2 = jeu.ySouris / deuxieme.HAUTEUR_IMAGE;
@@ -107,10 +116,10 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
             premier.yMatrice = y1;
 
             //on met à jour le score
-            score(premier, deuxieme, jeu, plateau, numeroPirate);
+            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
 
             //on enlève la case
-            plateau.matrice[y1][x1].valeur = 0;
+            plateau.matrice[premier.yMatrice][premier.xMatrice].valeur = 0;
 
             //on veut que l'autre joueur démarre d'où le joueur précédent à cliqué
             deuxieme.xMatrice = premier.xMatrice;
@@ -136,9 +145,9 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
             deuxieme.xMatrice = x2;
             deuxieme.yMatrice = y2;
 
-            score(premier, deuxieme, jeu, plateau, numeroPirate);
+            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
 
-            plateau.matrice[y2][x2].valeur = 0;
+            plateau.matrice[deuxieme.yMatrice][deuxieme.xMatrice].valeur = 0;
 
 
             premier.xMatrice = deuxieme.xMatrice;
@@ -235,9 +244,9 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
             deuxieme.xMatrice = xia;
             deuxieme.yMatrice = yia;
 
-            score(premier, deuxieme, jeu, plateau, numeroPirate);
+            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
 
-            plateau.matrice[yia][xia].valeur = 0;
+            plateau.matrice[deuxieme.yMatrice][deuxieme.xMatrice].valeur = 0;
 
             premier.xMatrice = deuxieme.xMatrice;
             premier.yMatrice = deuxieme.yMatrice;
@@ -248,7 +257,7 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
 }
 
 
-void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur)
+void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur, Piece &unePiece)
 {
 
     int x, y;
@@ -289,7 +298,7 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
         premier.last = plateau.matrice[y][x].valeur;
 
         //on regarde si une des conditions de victoire est validé
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur);
+        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
         break;
 
     //on reprend le même code si on joue à deux
@@ -319,7 +328,7 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
         }
         deuxieme.last = plateau.matrice[y][x].valeur;
 
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur);
+        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
         break;
 
     //si on joue contre l'ia
@@ -349,12 +358,12 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
         }
         deuxieme.last = plateau.matrice[y][x].valeur;
 
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur);
+        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
         break;
     }
 }
 
-void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur)
+void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int &numJoueur, Piece &unePiece)
 {
     int nbZero = 0;
     int x = jeu.xSouris / premier.LARGEUR_IMAGE;
@@ -386,11 +395,12 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(premier, jeu, 240, 13, 0);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        //jeu.quit = true;
-        jeu.menu = true;
-        jeu.once = true;
+        numJoueur = 0;
+        initPirate(premier, deuxieme);
+        placementPiecesTableau(plateau, unePiece);
         jeu.solo = false;
         jeu.duo = false;
+        jeu.menu = true;
     }
 
     //pour le joueur 2, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
@@ -400,12 +410,12 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(deuxieme, jeu, 240, 13, 1);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        //jeu.quit = true;
-        jeu.menu = true;
-        jeu.once = true;
+        numJoueur = 0;
+        initPirate(premier, deuxieme);
+        placementPiecesTableau(plateau, unePiece);
         jeu.solo = false;
         jeu.duo = false;
-
+        jeu.menu = true;
     }
 
     //pour l'ia, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
@@ -415,11 +425,12 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(deuxieme, jeu, 240, 13, 1);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        //jeu.quit = true;
-        jeu.menu = true;
-        jeu.once = true;
+        numJoueur = 0;
+        initPirate(premier, deuxieme);
+        placementPiecesTableau(plateau, unePiece);
         jeu.solo = false;
         jeu.duo = false;
+        jeu.menu = true;
     }
 }
 
