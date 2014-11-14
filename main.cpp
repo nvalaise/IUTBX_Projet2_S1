@@ -9,7 +9,6 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-
     Gestion jeu;
     Piece unePiece;
     Plateau plateau;
@@ -88,17 +87,19 @@ int main(int argc, char* argv[])
 
         if (jeu.menu)
         {
-
-            /****** Prévision si on jeu revenir au menu après ********
-            int numeroPirate = 0;
-            initPirate(premier, deuxieme);
-            placementPiecesTableau(plateau, unePiece);
-            premier.score=0;
-            premier.nbBonus=0;
-            deuxieme.score=0;
-            deuxieme.nbBonus=0;
-            **********************************************************/
-
+            if (jeu.once)
+            {
+                /****** Prévision si on jeu revenir au menu après ********/
+                numeroPirate = 0;
+                initPirate(premier, deuxieme);
+                placementPiecesTableau(plateau, unePiece);
+                premier.score=0;
+                premier.nbBonus=0;
+                deuxieme.score=0;
+                deuxieme.nbBonus=0;
+                /**********************************************************/
+                jeu.once = false;
+            }
             appliquerImage(0, 0, menu, jeu.ecran);
             appliquerClip(600, 100, bouton, jeu.ecran, &imageBouton[0]);
             appliquerClip(600, 200, bouton, jeu.ecran, &imageBouton[1]);

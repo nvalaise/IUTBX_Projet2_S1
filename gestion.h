@@ -31,6 +31,7 @@ struct Gestion
 
 	SDL_Surface* ecran = NULL;
 	SDL_Event event;
+	bool once = true;
 
 	//pour appuyer sur les touches du clavier
 	Uint8 *kestates = SDL_GetKeyState(NULL);

@@ -386,8 +386,11 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(premier, jeu, 240, 13, 0);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        jeu.quit = true;
-        //jeu.menu = true;
+        //jeu.quit = true;
+        jeu.menu = true;
+        jeu.once = true;
+        jeu.solo = false;
+        jeu.duo = false;
     }
 
     //pour le joueur 2, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
@@ -397,8 +400,12 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(deuxieme, jeu, 240, 13, 1);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        jeu.quit = true;
-        //jeu.menu = true;
+        //jeu.quit = true;
+        jeu.menu = true;
+        jeu.once = true;
+        jeu.solo = false;
+        jeu.duo = false;
+
     }
 
     //pour l'ia, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
@@ -408,8 +415,11 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         afficheGagnant(deuxieme, jeu, 240, 13, 1);
         SDL_Flip(jeu.ecran);
         SDL_Delay(2000);
-        jeu.quit = true;
-        //jeu.menu = true;
+        //jeu.quit = true;
+        jeu.menu = true;
+        jeu.once = true;
+        jeu.solo = false;
+        jeu.duo = false;
     }
 }
 
