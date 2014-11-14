@@ -111,16 +111,75 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
         //si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
         if (((x1 == premier.xMatrice) || (y1 == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y1][x1].valeur != 0))
         {
-            cout << "x1 : " << x1  << endl;
-            cout << "x2 : " << x2  << endl;
+            //si on va vers le haut
+            if((premier.xMatrice == x1) && (premier.yMatrice > y1))
+            {
+                /*premier.xMatrice = x1;
+                while(premier.yMatrice > y1)
+                {
+                    premier.yMatrice -=10;
+                    SDL_Delay(10);
+                }*/
 
+                premier.xMatrice = x1;
+                premier.haut = true;
+                premier.bas = false;
+                premier.gauche = false;
+                premier.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (premier.yMatrice*61) << " à " <<  (y1*61)<< endl ;
+
+                //il faut donc faire y--
+            }
+            //si on va vers le bas
+            else if((premier.xMatrice == x1) && (premier.yMatrice < y1))
+            {
+                /*premier.xMatrice = x1;
+                while(premier.yMatrice < y1)
+                {
+                    premier.yMatrice -=10;
+                    SDL_Delay(10);
+                }*/
+
+                premier.xMatrice = x1;
+                premier.haut = false;
+                premier.bas = true;
+                premier.gauche = false;
+                premier.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (premier.yMatrice*61) << " à " << (y1*61) << endl ;
+                //il faut donc faire y++
+            }
+            //si on va vers la gauche
+            else if((premier.xMatrice > x1) && (premier.yMatrice == y1))
+            {
+                premier.yMatrice = y1;
+                premier.haut = false;
+                premier.bas = false;
+                premier.gauche = true;
+                premier.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (x1*61) << endl ;
+                //il faut donc faire x--
+            }
+            //si on va vers la droite
+            else if((premier.xMatrice < x1) && (premier.yMatrice == y1))
+            {
+                premier.yMatrice = y1;
+                premier.haut = false;
+                premier.bas = false;
+                premier.gauche = false;
+                premier.droite = true;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (x1*61) << endl ;
+                //il faut donc faire x++
+            }
+
+            marcher(premier, deuxieme, premier.xMatrice, x1, premier.yMatrice, y1, plateau, numeroPirate);
 
             //sélection de la case
             premier.xMatrice = x1;
             premier.yMatrice = y1;
 
-            cout << "premier.yMatrice : " << premier.yMatrice << endl;
-            cout << "premier.xMatrice : " << premier.xMatrice << endl ;
+
+
+            //if((x2 == premier.xMatrice) && ())
 
 
             //on met à jour le score
@@ -149,6 +208,41 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
         //si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
         else if (((x2 == deuxieme.xMatrice) || (y2 == deuxieme.yMatrice)) && (numeroPirate == 1) && (plateau.matrice[y2][x2].valeur != 0))
         {
+            if((deuxieme.xMatrice == x2) && (deuxieme.yMatrice > y2))
+            {
+                deuxieme.haut = true;
+                deuxieme.bas = false;
+                deuxieme.gauche = false;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (y2*61)<< endl ;
+            }
+            else if((deuxieme.xMatrice == x2) && (deuxieme.yMatrice < y2))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = true;
+                deuxieme.gauche = false;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (y2*61)<< endl ;
+            }
+            else if((deuxieme.xMatrice > x2) && (deuxieme.yMatrice == y2))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = false;
+                deuxieme.gauche = true;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (y2*61) << endl ;
+            }
+            else if((deuxieme.xMatrice < x2) && (deuxieme.yMatrice == y2))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = false;
+                deuxieme.gauche = false;
+                deuxieme.droite = true;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (y2*61) << endl ;
+            }
+
+            marcher(premier, deuxieme, deuxieme.xMatrice, x2, deuxieme.yMatrice, y2, plateau, numeroPirate);
+
             //pareil que précédemment
             deuxieme.xMatrice = x2;
             deuxieme.yMatrice = y2;
@@ -247,6 +341,41 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
                 xia = xmax;
             }
 
+            if((deuxieme.xMatrice == xia) && (deuxieme.yMatrice > yia))
+            {
+                deuxieme.haut = true;
+                deuxieme.bas = false;
+                deuxieme.gauche = false;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (yia*61)<< endl ;
+            }
+            else if((deuxieme.xMatrice == xia) && (deuxieme.yMatrice < yia))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = true;
+                deuxieme.gauche = false;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (yia*61)<< endl ;
+            }
+            else if((deuxieme.xMatrice > xia) && (deuxieme.yMatrice == yia))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = false;
+                deuxieme.gauche = true;
+                deuxieme.droite = false;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (yia*61) << endl ;
+            }
+            else if((deuxieme.xMatrice < xia) && (deuxieme.yMatrice == yia))
+            {
+                deuxieme.haut = false;
+                deuxieme.bas = false;
+                deuxieme.gauche = false;
+                deuxieme.droite = true;
+                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (yia*61) << endl ;
+            }
+
+            marcher(premier, deuxieme, deuxieme.xMatrice, xia, deuxieme.yMatrice, yia, plateau, numeroPirate);
+
 
             //on donne les coordonnées finlaes à l'ia
             deuxieme.xMatrice = xia;
@@ -261,6 +390,95 @@ void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestio
 
             numeroPirate = 0;
         }
+    }
+}
+
+void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate)
+{
+    switch(numeroPirate)
+    {
+    case 0:
+        if(premier.haut)
+        {
+            cout << "vers le haut" << endl ;
+            cout << "vers le haut" << endl ;
+            int i=0;
+            while(premier.yMatrice*61 > y2*61)
+            {
+                cout << (premier.yMatrice*61) << " > " << (y2*61) << endl ;
+                premier.y -=1;
+            }
+        }
+        if(premier.bas)
+        {
+            while(premier.yMatrice < y1)
+            {
+                premier.yMatrice +=1;
+            }
+
+        }
+        if(premier.gauche)
+        {
+            while(premier.xMatrice > x1)
+            {
+                premier.xMatrice -=1;
+            }
+
+        }
+        if(premier.droite)
+        {
+            while(premier.xMatrice < x1)
+            {
+                premier.xMatrice -=1;
+            }
+
+        }
+        break;
+
+
+
+    case 1:
+        if(deuxieme.haut)
+        {
+
+        }
+        if(deuxieme.bas)
+        {
+
+        }
+        if(deuxieme.gauche)
+        {
+
+        }
+        if(deuxieme.droite)
+        {
+
+        }
+
+        break;
+
+
+
+    case 2:
+        if(deuxieme.haut)
+        {
+
+        }
+        if(deuxieme.bas)
+        {
+
+        }
+        if(deuxieme.gauche)
+        {
+
+        }
+        if(deuxieme.droite)
+        {
+
+        }
+
+
+        break;
     }
 }
 
@@ -476,3 +694,30 @@ void cleanImageGagnant(Joueur &pirate)
     SDL_FreeSurface(pirate.imageGagnantRouge);
     SDL_FreeSurface(pirate.imageGagnantVert);
 }
+
+/********code systeme
+grep -w ^$1 ville.txt | cut -d ":" -f2
+
+    2 formes :
+        -NOM=CHAINE
+        ->affectation simple
+
+        -let NOM=EXPRESSION
+        -affection d'un résultat d'un calacul arithmétique
+
+a=12
+b=42
+
+c=a+b
+echo $c
+-> affiche a+b
+
+d=$a+$n
+echo $d
+-> affiche 12+42
+
+let e=a+b
+echo $e
+-> affiche 54
+
+***************/

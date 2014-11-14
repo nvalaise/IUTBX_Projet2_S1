@@ -42,6 +42,11 @@ struct Joueur
 	int bonus=10;
 	int nbBonus=0;
 	int last = 0;
+
+	bool haut = false;
+	bool bas = false;
+	bool gauche = false;
+	bool droite = false;
 };
 
 /***********************************
@@ -64,5 +69,7 @@ void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y);
 void cleanImageGagnant(Joueur &pirate);
 
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
+
+void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate);
 
 #endif
