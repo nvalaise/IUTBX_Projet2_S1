@@ -1,4 +1,5 @@
 #include "gestion.h"
+#include "plateau.h"
 
 using namespace std;
 

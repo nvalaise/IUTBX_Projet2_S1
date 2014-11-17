@@ -15,8 +15,8 @@ Declaration des includes
 #include <SDL/SDL_ttf.h>
 
 //fichier internes
-#include "gestion.h"
 #include "plateau.h"
+#include "gestion.h"
 
 /***********************************
 Declaration des constantes
@@ -37,7 +37,6 @@ struct Joueur
 	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.bmp");
 
 	int x, y;
-	int xMatrice, yMatrice;
 	int score = 0;
 	int bonus=10;
 	int nbBonus=0;
@@ -71,5 +70,7 @@ void cleanImageGagnant(Joueur &pirate);
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
 
 void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate);
+
+void direction(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate);
 
 #endif

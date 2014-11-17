@@ -10,15 +10,15 @@ using namespace std;
 void initPirate(Joueur &premier, Joueur &deuxieme)
 {
     //initialisation des coordonnées du premier joueur
-    premier.xMatrice = 3;
-    premier.yMatrice = 3;
+    premier.x = 3 * premier.LARGEUR_IMAGE;
+	premier.y = 3 * premier.HAUTEUR_IMAGE;
     premier.score = 0;
     premier.bonus = 0;
     premier.nbBonus = 0;
     premier.last = 0;
 
-    deuxieme.xMatrice = 3;
-    deuxieme.yMatrice = 3;
+	deuxieme.x = 3 * deuxieme.LARGEUR_IMAGE;
+	deuxieme.y = 3 * deuxieme.HAUTEUR_IMAGE;
     deuxieme.score = 0;
     deuxieme.bonus = 0;
     deuxieme.nbBonus = 0;
@@ -45,26 +45,12 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
 ***********************************************/
 void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate)
 {
-    switch(numeroPirate)
-    {
-    //si on doit afficher le joueur 1
-    case 0:
-        //position réelle à l'écran
-        premier.x = premier.xMatrice * premier.LARGEUR_IMAGE;
-        premier.y = premier.yMatrice * premier.HAUTEUR_IMAGE;
-
-        //on applique tout ça à l'écran
-        appliquerClip(premier.x, premier.y, premier.sprite, jeu.ecran, &premier.image[0]);
-        break;
-
-    //idem pour le joueur 2
-    case 1:
-        //position réelle à l'écran
-        deuxieme.x = premier.xMatrice * premier.LARGEUR_IMAGE;
-        deuxieme.y = premier.yMatrice * premier.HAUTEUR_IMAGE;
-        appliquerClip(deuxieme.x, deuxieme.y, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
-        break;
-    }
+	if (numeroPirate == 0){
+		appliquerClip(premier.x, premier.y, premier.sprite, jeu.ecran, &premier.image[0]);
+	}
+	else if (numeroPirate == 1){
+		appliquerClip(deuxieme.x, deuxieme.y, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+	}
 }
 
 /******FONCTION DE DEPLACEMENT DU PIRATE******
@@ -75,425 +61,246 @@ void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroP
   - la gestion pour la gestion des events souris
   - le numéro du joueur pour alterner
 ***********************************************/
-void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate, Piece &unePiece)
+void deplacerPirate(Joueur &premier, Joueur &deuxieme, Plateau &plateau ,Gestion &jeu, int &numeroPirate, Piece &unePiece)
 {
-    int x1 = jeu.xSouris / premier.LARGEUR_IMAGE;
-    int y1 = jeu.ySouris / premier.HAUTEUR_IMAGE;
+	int xSourisMatrice = jeu.xSouris / 61;
+	int ySourisMatrice = jeu.ySouris / 61;
 
-    int x2 = jeu.xSouris / deuxieme.LARGEUR_IMAGE;
-    int y2 = jeu.ySouris / deuxieme.HAUTEUR_IMAGE;
+	const int VITESSE = 3;
 
-    int maximum = 10;
-    int xia = 3 ;
-    int yia = 3 ;
+	SDL_Surface *dessinPirate = NULL;
+	SDL_Rect unDessinPirate[2];
+	dessinPirate = chargerImageCleCouleur("pirates.png", 0, 255, 255);
+	unDessinPirate[0].x = 0;
+	unDessinPirate[0].y = 0;
+	unDessinPirate[0].h = premier.HAUTEUR_IMAGE;
+	unDessinPirate[0].w = premier.LARGEUR_IMAGE;
+	unDessinPirate[1].x = premier.HAUTEUR_IMAGE;;
+	unDessinPirate[1].y = 0;
+	unDessinPirate[1].h = premier.HAUTEUR_IMAGE;
+	unDessinPirate[1].w = premier.LARGEUR_IMAGE;
 
-    int xmax = 3 ;
-    int ymax= 3 ;
+	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
+	{
+		if (numeroPirate == 0)
+		{
+			premier.bas = false;
+			premier.haut = false;
+			premier.gauche = false;
+			premier.droite = false;
+			direction(premier, deuxieme, jeu, numeroPirate);
+			if (premier.bas)
+			{
+				while (premier.y <= ySourisMatrice * 61)
+				{
+					premier.y += VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-    int alternative = 5;
-    int xaltern1 =3;
-    int yaltern1 =3;
-    int xaltern2 =3;
-    int yaltern2 =3;
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-    /*****
-    Un exemple :
-    si la souris a cliqué en 287, x1vaudra 287/61 = 4
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-    De plus, que l'on mette premier.LARG... ou deuxieme.LARG,
-    cela revient au même car ces constances sont contenu
-    dans la structure Joueur
-    *****/
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					deuxieme.x = premier.x;
+					deuxieme.y = premier.y;
+				}
+				numeroPirate = 1;
+			}
+			else if (premier.haut)
+			{
+				while (premier.y >= ySourisMatrice * 61)
+				{
+					premier.y -= VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-    //si on clique sur la zone de la grille
-    if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
-    {
-        //si le joueur 1 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
-        if (((x1 == premier.xMatrice) || (y1 == premier.yMatrice)) && (numeroPirate == 0) && (plateau.matrice[y1][x1].valeur != 0))
-        {
-            //si on va vers le haut
-            if((premier.xMatrice == x1) && (premier.yMatrice > y1))
-            {
-                /*premier.xMatrice = x1;
-                while(premier.yMatrice > y1)
-                {
-                    premier.yMatrice -=10;
-                    SDL_Delay(10);
-                }*/
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-                premier.xMatrice = x1;
-                premier.haut = true;
-                premier.bas = false;
-                premier.gauche = false;
-                premier.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (premier.yMatrice*61) << " à " <<  (y1*61)<< endl ;
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-                //il faut donc faire y--
-            }
-            //si on va vers le bas
-            else if((premier.xMatrice == x1) && (premier.yMatrice < y1))
-            {
-                /*premier.xMatrice = x1;
-                while(premier.yMatrice < y1)
-                {
-                    premier.yMatrice -=10;
-                    SDL_Delay(10);
-                }*/
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					deuxieme.x = premier.x;
+					deuxieme.y = premier.y;
+				}
+				numeroPirate = 1;
+			}
+			if (premier.droite)
+			{
+				while (premier.x <= xSourisMatrice * 61)
+				{
+					premier.x += VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-                premier.xMatrice = x1;
-                premier.haut = false;
-                premier.bas = true;
-                premier.gauche = false;
-                premier.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (premier.yMatrice*61) << " à " << (y1*61) << endl ;
-                //il faut donc faire y++
-            }
-            //si on va vers la gauche
-            else if((premier.xMatrice > x1) && (premier.yMatrice == y1))
-            {
-                premier.yMatrice = y1;
-                premier.haut = false;
-                premier.bas = false;
-                premier.gauche = true;
-                premier.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (x1*61) << endl ;
-                //il faut donc faire x--
-            }
-            //si on va vers la droite
-            else if((premier.xMatrice < x1) && (premier.yMatrice == y1))
-            {
-                premier.yMatrice = y1;
-                premier.haut = false;
-                premier.bas = false;
-                premier.gauche = false;
-                premier.droite = true;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (x1*61) << endl ;
-                //il faut donc faire x++
-            }
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-            marcher(premier, deuxieme, premier.xMatrice, x1, premier.yMatrice, y1, plateau, numeroPirate);
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            //sélection de la case
-            premier.xMatrice = x1;
-            premier.yMatrice = y1;
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					deuxieme.x = premier.x;
+					deuxieme.y = premier.y;
+				}
+				numeroPirate = 1;
+			}
+			else if (premier.gauche)
+			{
+				while (premier.x >= xSourisMatrice * 61)
+				{
+					premier.x -= VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            //if((x2 == premier.xMatrice) && ())
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					deuxieme.x = premier.x;
+					deuxieme.y = premier.y;
+				}
+				numeroPirate = 1;
+			}
+		}
 
+		else if (numeroPirate == 1)
+		{
+			deuxieme.bas = false;
+			deuxieme.haut = false;
+			deuxieme.gauche = false;
+			deuxieme.droite = false;
+			direction(premier, deuxieme, jeu, numeroPirate);
+			if (deuxieme.bas)
+			{
+				while (deuxieme.y <= ySourisMatrice * 61)
+				{
+					deuxieme.y += VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-            //on met à jour le score
-            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-            //on enlève la case
-            plateau.matrice[premier.yMatrice][premier.xMatrice].valeur = 0;
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            //on veut que l'autre joueur démarre d'où le joueur précédent à cliqué
-            deuxieme.xMatrice = premier.xMatrice;
-            deuxieme.yMatrice = premier.yMatrice;
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					premier.x = deuxieme.x;
+					premier.y = deuxieme.y;
+				}
+				numeroPirate = 0;
+			}
+			else if (deuxieme.haut)
+			{
+				while (deuxieme.y >= ySourisMatrice * 61)
+				{
+					deuxieme.y -= VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-            //on prévoit de changer de personnage
-            if (jeu.duo)
-            {
-                //on envoie sur le joueur 2 si on a choisit de jouer contre lui
-                numeroPirate = 1;
-            }
-            else if (jeu.solo)
-            {
-                //sinon on envoie sur l'ia
-                numeroPirate = 2;
-            }
-        }
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-        //si le joueur 2 clique sur une case non vide horizontale ou verticale à sa position, on le déplace
-        else if (((x2 == deuxieme.xMatrice) || (y2 == deuxieme.yMatrice)) && (numeroPirate == 1) && (plateau.matrice[y2][x2].valeur != 0))
-        {
-            if((deuxieme.xMatrice == x2) && (deuxieme.yMatrice > y2))
-            {
-                deuxieme.haut = true;
-                deuxieme.bas = false;
-                deuxieme.gauche = false;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (y2*61)<< endl ;
-            }
-            else if((deuxieme.xMatrice == x2) && (deuxieme.yMatrice < y2))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = true;
-                deuxieme.gauche = false;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (y2*61)<< endl ;
-            }
-            else if((deuxieme.xMatrice > x2) && (deuxieme.yMatrice == y2))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = false;
-                deuxieme.gauche = true;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (y2*61) << endl ;
-            }
-            else if((deuxieme.xMatrice < x2) && (deuxieme.yMatrice == y2))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = false;
-                deuxieme.gauche = false;
-                deuxieme.droite = true;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (y2*61) << endl ;
-            }
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            marcher(premier, deuxieme, deuxieme.xMatrice, x2, deuxieme.yMatrice, y2, plateau, numeroPirate);
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					premier.x = deuxieme.x;
+					premier.y = deuxieme.y;
+				}
+				numeroPirate = 0;
+			}
+			if (deuxieme.droite)
+			{
+				while (deuxieme.x <= xSourisMatrice * 61)
+				{
+					deuxieme.x += VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
-            //pareil que précédemment
-            deuxieme.xMatrice = x2;
-            deuxieme.yMatrice = y2;
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            plateau.matrice[deuxieme.yMatrice][deuxieme.xMatrice].valeur = 0;
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					premier.x = deuxieme.x;
+					premier.y = deuxieme.y;
+				}
+				numeroPirate = 0;
+			}
+			else if (deuxieme.gauche)
+			{
+				while (deuxieme.x >= xSourisMatrice * 61)
+				{
+					deuxieme.x -= VITESSE;
+					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+					afficherPiecePlateau(plateau, jeu);
 
+					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
+					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
 
-            premier.xMatrice = deuxieme.xMatrice;
-            premier.yMatrice = deuxieme.yMatrice;
+					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+					afficherScore(premier, jeu, 550, 100);
 
-            numeroPirate = 0;
-        }
-
-
-        //déplacement de l'ia
-        else if (numeroPirate == 2)
-        {
-            //on teste la ligne sur laquelle est arrivé le joueur 1
-            for(int i=0; i<7; i++)
-            {
-                //on cherche la valeur max de la ligne
-                if(plateau.matrice[i][deuxieme.xMatrice].valeur>maximum)
-                {
-                    //et si elle existe on prend sa valeur et ses coordonnées
-                    maximum = plateau.matrice[i][deuxieme.xMatrice].valeur;
-                    ymax = i;
-                    xmax = deuxieme.xMatrice;
-                }
-
-                //et si la case précedente st plus grand on prend ses caractéristiques
-                else if(((plateau.matrice[i][deuxieme.xMatrice].valeur == deuxieme.last) || (plateau.matrice[i][deuxieme.xMatrice].valeur >= alternative))
-                        && (xia!=xaltern1) && (yia != yaltern1) && (xia!=xaltern2) && (yia != yaltern2))
-                {
-                    if(plateau.matrice[i][deuxieme.xMatrice].valeur>alternative)
-                    {
-                        plateau.matrice[i][deuxieme.xMatrice].valeur = alternative;
-                        yaltern1 = i;
-                        xaltern1 = deuxieme.xMatrice;
-                    }
-                    if(plateau.matrice[i][deuxieme.xMatrice].valeur == deuxieme.last)
-                    {
-                        yaltern2 = i;
-                        xaltern2 = deuxieme.xMatrice;
-                    }
-                }
-            }
-
-            //maintenant on test la colonne sur laquelle le joueur 1 est arrivé
-            for(int i=0; i<7; i++)
-            {
-                //les tests sont les mêmes que précédemment
-                if(plateau.matrice[deuxieme.yMatrice][i].valeur>maximum)
-                {
-                    maximum=plateau.matrice[deuxieme.yMatrice][i].valeur;
-                    xmax = i;
-                    ymax = deuxieme.yMatrice;
-                    //au dessus on dit que le le maximum est présent sur la colonne
-                }
-
-                else if(((plateau.matrice[deuxieme.yMatrice][i].valeur == deuxieme.last) || (plateau.matrice[deuxieme.yMatrice][i].valeur>=alternative))
-                        && (xia!=xaltern1) && (yia != yaltern1) && (xia!=xaltern2) && (yia != yaltern2) )
-                {
-                    if (plateau.matrice[deuxieme.yMatrice][i].valeur > alternative)
-                    {
-                        alternative = plateau.matrice[deuxieme.yMatrice][i].valeur;
-                        xaltern1 = i;
-                        yaltern1 = deuxieme.yMatrice;
-                    }
-                    if (plateau.matrice[deuxieme.yMatrice][i].valeur == deuxieme.last)
-                    {
-                        xaltern2 = i;
-                        yaltern2 = deuxieme.yMatrice;
-                    }
-                }
-            }
-
-            if(plateau.matrice[ymax][xmax].valeur >= maximum)
-            {
-                //on a fait les mêmes vérifications qu'avant
-                yia=yaltern1;
-                xia=xaltern1;
-            }
-
-            if(plateau.matrice[yaltern1][yaltern1].valeur >= maximum)
-            {
-                //on a fait les mêmes vérifications qu'avant
-                yia=yaltern2;
-                xia=xaltern2;
-            }
-
-            else
-            {
-                yia = ymax;
-                xia = xmax;
-            }
-
-            if((deuxieme.xMatrice == xia) && (deuxieme.yMatrice > yia))
-            {
-                deuxieme.haut = true;
-                deuxieme.bas = false;
-                deuxieme.gauche = false;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (yia*61)<< endl ;
-            }
-            else if((deuxieme.xMatrice == xia) && (deuxieme.yMatrice < yia))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = true;
-                deuxieme.gauche = false;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (deuxieme.yMatrice*61) << " à " <<  (yia*61)<< endl ;
-            }
-            else if((deuxieme.xMatrice > xia) && (deuxieme.yMatrice == yia))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = false;
-                deuxieme.gauche = true;
-                deuxieme.droite = false;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (yia*61) << endl ;
-            }
-            else if((deuxieme.xMatrice < xia) && (deuxieme.yMatrice == yia))
-            {
-                deuxieme.haut = false;
-                deuxieme.bas = false;
-                deuxieme.gauche = false;
-                deuxieme.droite = true;
-                //cout << "sur l'écran l'image parcourt " << (premier.xMatrice*61) << " à " << (yia*61) << endl ;
-            }
-
-            marcher(premier, deuxieme, deuxieme.xMatrice, xia, deuxieme.yMatrice, yia, plateau, numeroPirate);
-
-
-            //on donne les coordonnées finlaes à l'ia
-            deuxieme.xMatrice = xia;
-            deuxieme.yMatrice = yia;
-
-            score(premier, deuxieme, jeu, plateau, numeroPirate, unePiece);
-
-            plateau.matrice[deuxieme.yMatrice][deuxieme.xMatrice].valeur = 0;
-
-            premier.xMatrice = deuxieme.xMatrice;
-            premier.yMatrice = deuxieme.yMatrice;
-
-            numeroPirate = 0;
-        }
-    }
+					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+					afficherScore(deuxieme, jeu, 750, 100);
+					afficherPirate(premier, deuxieme, jeu, numeroPirate);
+					SDL_Flip(jeu.ecran);
+					premier.x = deuxieme.x;
+					premier.y = deuxieme.y;
+				}
+				numeroPirate = 0;
+			}
+		}
+	}
 }
 
 void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate)
 {
-    switch(numeroPirate)
-    {
-    case 0:
-        if(premier.haut)
-        {
-            cout << "vers le haut" << endl ;
-            cout << "vers le haut" << endl ;
-            int i=0;
-            while(premier.yMatrice*61 > y2*61)
-            {
-                cout << (premier.yMatrice*61) << " > " << (y2*61) << endl ;
-                premier.y -=1;
-            }
-        }
-        if(premier.bas)
-        {
-            while(premier.yMatrice < y1)
-            {
-                premier.yMatrice +=1;
-            }
-
-        }
-        if(premier.gauche)
-        {
-            while(premier.xMatrice > x1)
-            {
-                premier.xMatrice -=1;
-            }
-
-        }
-        if(premier.droite)
-        {
-            while(premier.xMatrice < x1)
-            {
-                premier.xMatrice -=1;
-            }
-
-        }
-        break;
-
-
-
-    case 1:
-        if(deuxieme.haut)
-        {
-
-        }
-        if(deuxieme.bas)
-        {
-
-        }
-        if(deuxieme.gauche)
-        {
-
-        }
-        if(deuxieme.droite)
-        {
-
-        }
-
-        break;
-
-
-
-    case 2:
-        if(deuxieme.haut)
-        {
-
-        }
-        if(deuxieme.bas)
-        {
-
-        }
-        if(deuxieme.gauche)
-        {
-
-        }
-        if(deuxieme.droite)
-        {
-
-        }
-
-
-        break;
-    }
+    
 }
-
 
 void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur, Piece &unePiece)
 {
 
     int x, y;
-
     //gestion des scores en fonction du joueur en cours
     switch(numJoueur)
     {
     case 0:
-        x = premier.xMatrice;
-        y = premier.yMatrice;
+        x = premier.x / 61;
+        y = premier.x / 61;
         //son score = score précédent + valeur de la pièce
         premier.score += plateau.matrice[y][x].valeur;
 
@@ -530,8 +337,8 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
     //on reprend le même code si on joue à deux
     case 1:
 
-        x = deuxieme.xMatrice;
-        y = deuxieme.yMatrice;
+        x = deuxieme.x / 61;
+        y = deuxieme.y / 61;
 
         deuxieme.score += plateau.matrice[y][x].valeur;
 
@@ -560,8 +367,8 @@ void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, in
     //si on joue contre l'ia
     case 2:
 
-        x = deuxieme.xMatrice;
-        y = deuxieme.yMatrice;
+        x = deuxieme.x / 61;
+        y = deuxieme.y / 61;
 
         deuxieme.score += plateau.matrice[y][x].valeur;
 
@@ -691,33 +498,73 @@ void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate
 
 void cleanImageGagnant(Joueur &pirate)
 {
-    SDL_FreeSurface(pirate.imageGagnantRouge);
-    SDL_FreeSurface(pirate.imageGagnantVert);
+	SDL_FreeSurface(pirate.imageGagnantRouge);
+	SDL_FreeSurface(pirate.imageGagnantVert);
 }
 
-/********code systeme
-grep -w ^$1 ville.txt | cut -d ":" -f2
+void direction(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate)
+{
+	if (numeroPirate == 0)
+	{
+		if (premier.y / 61 < jeu.ySouris / 61 && premier.x / 61 == jeu.xSouris / 61)
+		{
+			premier.bas = true;
+			premier.haut = false;
+			premier.gauche = false;
+			premier.droite = false;
+		}
+		else if (premier.y / 61 > jeu.ySouris / 61 && premier.x / 61 == jeu.xSouris / 61)
+		{
+			premier.bas = false;
+			premier.haut = true;
+			premier.gauche = false;
+			premier.droite = false;
+		}
+		else if (premier.x / 61 < jeu.xSouris / 61 && premier.y / 61 == jeu.ySouris / 61)
+		{
+			premier.bas = false;
+			premier.haut = false;
+			premier.droite = true;
+			premier.gauche = false;
+		}
+		else if (premier.x / 61 > jeu.xSouris / 61 && premier.y / 61 == jeu.ySouris / 61)
+		{
+			premier.bas = false;
+			premier.haut = false;
+			premier.droite = false;
+			premier.gauche = true;
+		}
+	}
 
-    2 formes :
-        -NOM=CHAINE
-        ->affectation simple
-
-        -let NOM=EXPRESSION
-        -affection d'un résultat d'un calacul arithmétique
-
-a=12
-b=42
-
-c=a+b
-echo $c
--> affiche a+b
-
-d=$a+$n
-echo $d
--> affiche 12+42
-
-let e=a+b
-echo $e
--> affiche 54
-
-***************/
+	else if (numeroPirate == 1)
+	{
+		if (deuxieme.y / 61 < jeu.ySouris / 61 && deuxieme.x / 61 == jeu.xSouris / 61)
+		{
+			deuxieme.bas = true;
+			deuxieme.haut = false;
+			deuxieme.gauche = false;
+			deuxieme.droite = false;
+		}
+		else if (deuxieme.y / 61 > jeu.ySouris / 61 && deuxieme.x / 61 == jeu.xSouris / 61)
+		{
+			deuxieme.bas = false;
+			deuxieme.haut = true;
+			deuxieme.gauche = false;
+			deuxieme.droite = false;
+		}
+		else if (deuxieme.x / 61 < jeu.xSouris / 61 && deuxieme.y / 61 == jeu.ySouris / 61)
+		{
+			deuxieme.bas = false;
+			deuxieme.haut = false;
+			deuxieme.droite = true;
+			deuxieme.gauche = false;
+		}
+		else if (deuxieme.x / 61 > jeu.xSouris / 61 && deuxieme.y / 61 == jeu.ySouris / 61)
+		{
+			deuxieme.bas = false;
+			deuxieme.haut = false;
+			deuxieme.droite = false;
+			deuxieme.gauche = true;
+		}
+	}
+}
