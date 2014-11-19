@@ -76,3 +76,5 @@ void afficheMot(string message, int x, int y, int taillePolice, Gestion &jeu, st
         cout << "Can't open this file : " << nomPolice << endl;
     }
 }
+
+

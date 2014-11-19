@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
 					deuxieme.x = jeu.xSouris / 61 * 61;
 					deuxieme.y = jeu.ySouris / 61 * 61;
 				}
-				
+
 				else if (numeroPirate == 1)
 				{
 					afficherPirate(deuxieme, jeu, numeroPirate);
@@ -146,11 +146,14 @@ int main(int argc, char* argv[])
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 			afficheGagnant(premier, jeu, 240, 13, 0);
+            sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
 			SDL_Delay(2000);
 			numeroPirate = 0;
 			initPirate(premier, deuxieme);
 			placementPiecesTableau(plateau, unePiece);
+			premier.tour=0;
+            deuxieme.tour=0;
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
@@ -160,6 +163,7 @@ int main(int argc, char* argv[])
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 			afficheGagnant(deuxieme, jeu, 240, 13, 1);
+            sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
 			SDL_Delay(2000);
 			numeroPirate = 0;
@@ -168,6 +172,8 @@ int main(int argc, char* argv[])
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
+			premier.tour=0;
+            deuxieme.tour=0;
 			jeu.nbZero = 0;
 		}
 		SDL_Flip(jeu.ecran);

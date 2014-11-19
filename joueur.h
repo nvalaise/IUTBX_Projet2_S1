@@ -8,6 +8,8 @@ Declaration des includes
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <fstream>
+
 
 //declaration de la SDL
 #include <SDL/SDL.h>
@@ -30,6 +32,8 @@ struct Joueur
 	const int LARGEUR_IMAGE = 61;
 	const int HAUTEUR_IMAGE = 61;
 
+    int tabScores[300][300];
+
 	SDL_Surface* sprite = chargerImageCleCouleur("pirates.png", 0, 255, 255);
 	SDL_Rect image[2];
 
@@ -41,6 +45,8 @@ struct Joueur
 	int bonus=10;
 	int nbBonus=0;
 	int last = 0;
+    int tour = 0;
+
 
 	bool haut = false;
 	bool bas = false;
@@ -70,5 +76,10 @@ void cleanImageGagnant(Joueur &pirate);
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
 
 void direction(Joueur &pirate, Gestion &jeu);
+
+void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate);
+
+void lireDonnes(Joueur &Joueur);
+
 
 #endif
