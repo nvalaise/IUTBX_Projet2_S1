@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
 			}
         }
 
-		else if (victoire(premier, jeu, plateau, unePiece, 0) == 0)
+		else if (victoire(premier, jeu, plateau, unePiece, numeroPirate) == 0)
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 			afficheGagnant(premier, jeu, 240, 13, 0);
@@ -154,8 +154,9 @@ int main(int argc, char* argv[])
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
+			jeu.nbZero = 0;
 		}
-		else if (victoire(deuxieme, jeu, plateau, unePiece, 1) == 1)
+		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1)
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 			afficheGagnant(deuxieme, jeu, 240, 13, 1);
@@ -167,6 +168,7 @@ int main(int argc, char* argv[])
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
+			jeu.nbZero = 0;
 		}
 		SDL_Flip(jeu.ecran);
 

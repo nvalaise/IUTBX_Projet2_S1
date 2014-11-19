@@ -67,6 +67,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 	int ySourisMatrice = jeu.ySouris / 61;
 
 	const int VITESSE = 3;
+
 	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427 && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0)
 	{
 		direction(pirate, jeu);
@@ -128,6 +129,25 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 			jeu.finTour = true;
 		}
 	}
+	if (jeu.finTour)
+	{
+		jeu.nbZero = 0;
+		for (int i = 0; i < 7; i++)
+		{
+			if (plateau.matrice[i][pirate.x / 61].valeur == 0)
+			{
+				jeu.nbZero++;
+			}
+		}
+		for (int i = 0; i < 7; i++)
+		{
+			if (plateau.matrice[pirate.y / 61][i].valeur == 0)
+			{
+				jeu.nbZero++;
+			}
+		}
+		cout << jeu.nbZero << endl;
+	}
 }
 
 void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
@@ -140,7 +160,7 @@ void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
     //si la case cliqué precédemment est la même que la case cliqué par la suite
     //et ceci 4 fois maximum
     //le bonus est multiplié par 2
-	if ((pirate.last == plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur) && (pirate.nbBonus < 4))
+	if (pirate.last == plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur && pirate.nbBonus < 4)
     {
 		pirate.score += pirate.bonus;
 		pirate.bonus = 2 * pirate.bonus;
@@ -160,48 +180,18 @@ void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
 		pirate.bonus = 10;
     }
 
-    //la case est enregistré pour la traiter p
 	pirate.last = plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur;
 
-    //on regarde si une des conditions de victoire est validé
-	//victoire(pirate, jeu, plateau, unePiece);
-
-	/*
-	//si on joue contre l'ia
-	case 2:
-
-	x = deuxieme.x / 61;
-	y = deuxieme.y / 61;
-
-	deuxieme.score += plateau.matrice[y][x].valeur;
-
-	if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
-	{
-	deuxieme.score += deuxieme.bonus;
-	deuxieme.bonus=2*deuxieme.bonus;
-	deuxieme.nbBonus++;
-	}
-	else
-	{
-	deuxieme.nbBonus = 0;
-	deuxieme.bonus = 10;
-	}
-
-	if(deuxieme.nbBonus > 4)
-	{
-	deuxieme.nbBonus=0;
-	deuxieme.bonus=10;
-	}
-	deuxieme.last = plateau.matrice[y][x].valeur;
-
-	victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
-	break;
-	*/
 }
 
 int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate)
 {
     //pour le joueur 1, si son score est supérieur à 500 ou que le joueur 2 ne peut plus bouger
+
+	if (jeu.nbZero == 14)
+	{
+		return numeroPirate;
+	}
 
 	if (pirate.score >= 500)
 	{
@@ -211,39 +201,7 @@ int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, in
 	{
 		return -1;
 	}
-    /*//encore pleins de fonction à appliquer
-    SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-	if (numeroPirate == 0)
-	{
-		return 0;
-	}
-	else if 
-    afficheGagnant(premier, jeu, 240, 13, 0);
-    SDL_Flip(jeu.ecran);
-    SDL_Delay(2000);
-    numJoueur = 0;
-    initPirate(premier, deuxieme);
-    placementPiecesTableau(plateau, unePiece);
-    jeu.solo = false;
-    jeu.duo = false;
-    jeu.menu = true;
-	*/
-	/*
-    //pour l'ia, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
-    if((numJoueur==2) && ((deuxieme.score>=500) || (nbZero==12)))
-    {
-        SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-        afficheGagnant(deuxieme, jeu, 240, 13, 1);
-        SDL_Flip(jeu.ecran);
-        SDL_Delay(2000);
-        numJoueur = 0;
-        initPirate(premier, deuxieme);
-        placementPiecesTableau(plateau, unePiece);
-        jeu.solo = false;
-        jeu.duo = false;
-        jeu.menu = true;
-    }
-	*/
+
 }
 
 void cleanPirate(Joueur &pirate)

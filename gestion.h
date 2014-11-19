@@ -43,7 +43,6 @@ struct Gestion
 	bool finTour = false;
 
 	int ySouris, xSouris;
-
 	int nbZero = 0;
 };
 
