@@ -43,13 +43,13 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
   - la gestion pour la gestion des event souris
   - le numéro du joueur à gérer
 ***********************************************/
-void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate)
+void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate)
 {
 	if (numeroPirate == 0){
-		appliquerClip(premier.x, premier.y, premier.sprite, jeu.ecran, &premier.image[0]);
+		appliquerClip(pirate.x, pirate.y, pirate.sprite, jeu.ecran, &pirate.image[0]);
 	}
 	else if (numeroPirate == 1){
-		appliquerClip(deuxieme.x, deuxieme.y, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+		appliquerClip(pirate.x, pirate.y, pirate.sprite, jeu.ecran, &pirate.image[1]);
 	}
 }
 
@@ -61,396 +61,174 @@ void afficherPirate(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroP
   - la gestion pour la gestion des events souris
   - le numéro du joueur pour alterner
 ***********************************************/
-void deplacerPirate(Joueur &premier, Joueur &deuxieme, Plateau &plateau ,Gestion &jeu, int &numeroPirate, Piece &unePiece)
+void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion &jeu, Piece &unePiece)
 {
 	int xSourisMatrice = jeu.xSouris / 61;
 	int ySourisMatrice = jeu.ySouris / 61;
 
 	const int VITESSE = 3;
-
-	SDL_Surface *dessinPirate = NULL;
-	SDL_Rect unDessinPirate[2];
-	dessinPirate = chargerImageCleCouleur("pirates.png", 0, 255, 255);
-	unDessinPirate[0].x = 0;
-	unDessinPirate[0].y = 0;
-	unDessinPirate[0].h = premier.HAUTEUR_IMAGE;
-	unDessinPirate[0].w = premier.LARGEUR_IMAGE;
-	unDessinPirate[1].x = premier.HAUTEUR_IMAGE;;
-	unDessinPirate[1].y = 0;
-	unDessinPirate[1].h = premier.HAUTEUR_IMAGE;
-	unDessinPirate[1].w = premier.LARGEUR_IMAGE;
-
-	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427)
+	if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427 && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0)
 	{
-		if (numeroPirate == 0)
+		direction(pirate, jeu);
+		if (pirate.bas)
 		{
-			premier.bas = false;
-			premier.haut = false;
-			premier.gauche = false;
-			premier.droite = false;
-			direction(premier, deuxieme, jeu, numeroPirate);
-			if (premier.bas)
+			score(pirate, jeu, plateau, unePiece);
+			while (pirate.y < ySourisMatrice * 61)
 			{
-				while (premier.y <= ySourisMatrice * 61)
-				{
-					premier.y += VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
+				pirate.y += VITESSE;
+				plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+				afficherPiecePlateau(plateau, jeu);
 
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					deuxieme.x = premier.x;
-					deuxieme.y = premier.y;
-				}
-				numeroPirate = 1;
+				afficherPirate(pirate, jeu, numeroPirate);
+				SDL_Flip(jeu.ecran);
+				jeu.finTour = false;
 			}
-			else if (premier.haut)
-			{
-				while (premier.y >= ySourisMatrice * 61)
-				{
-					premier.y -= VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
-
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					deuxieme.x = premier.x;
-					deuxieme.y = premier.y;
-				}
-				numeroPirate = 1;
-			}
-			if (premier.droite)
-			{
-				while (premier.x <= xSourisMatrice * 61)
-				{
-					premier.x += VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
-
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					deuxieme.x = premier.x;
-					deuxieme.y = premier.y;
-				}
-				numeroPirate = 1;
-			}
-			else if (premier.gauche)
-			{
-				while (premier.x >= xSourisMatrice * 61)
-				{
-					premier.x -= VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
-
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					deuxieme.x = premier.x;
-					deuxieme.y = premier.y;
-				}
-				numeroPirate = 1;
-			}
+			jeu.finTour = true;
 		}
-
-		else if (numeroPirate == 1)
+		else if (pirate.haut)
 		{
-			deuxieme.bas = false;
-			deuxieme.haut = false;
-			deuxieme.gauche = false;
-			deuxieme.droite = false;
-			direction(premier, deuxieme, jeu, numeroPirate);
-			if (deuxieme.bas)
+			score(pirate, jeu, plateau, unePiece);
+			while (pirate.y > ySourisMatrice * 61)
 			{
-				while (deuxieme.y <= ySourisMatrice * 61)
-				{
-					deuxieme.y += VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
+				pirate.y -= VITESSE;
+				plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+				afficherPiecePlateau(plateau, jeu);
 
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					premier.x = deuxieme.x;
-					premier.y = deuxieme.y;
-				}
-				numeroPirate = 0;
+				afficherPirate(pirate, jeu, numeroPirate);
+				SDL_Flip(jeu.ecran);
 			}
-			else if (deuxieme.haut)
+			jeu.finTour = true;
+		}
+		else if (pirate.droite)
+		{
+			score(pirate, jeu, plateau, unePiece);
+			while (pirate.x < xSourisMatrice * 61)
 			{
-				while (deuxieme.y >= ySourisMatrice * 61)
-				{
-					deuxieme.y -= VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
+				pirate.x += VITESSE;
+				plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+				afficherPiecePlateau(plateau, jeu);
 
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					premier.x = deuxieme.x;
-					premier.y = deuxieme.y;
-				}
-				numeroPirate = 0;
+				afficherPirate(pirate, jeu, numeroPirate);
+				SDL_Flip(jeu.ecran);
 			}
-			if (deuxieme.droite)
+			jeu.finTour = true;
+		}
+		else if (pirate.gauche)
+		{
+			score(pirate, jeu, plateau, unePiece);
+			while (pirate.x > xSourisMatrice * 61)
 			{
-				while (deuxieme.x <= xSourisMatrice * 61)
-				{
-					deuxieme.x += VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
+				pirate.x -= VITESSE;
+				plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+				afficherPiecePlateau(plateau, jeu);
 
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					premier.x = deuxieme.x;
-					premier.y = deuxieme.y;
-				}
-				numeroPirate = 0;
+				afficherPirate(pirate, jeu, numeroPirate);
+				SDL_Flip(jeu.ecran);
 			}
-			else if (deuxieme.gauche)
-			{
-				while (deuxieme.x >= xSourisMatrice * 61)
-				{
-					deuxieme.x -= VITESSE;
-					SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-					afficherPiecePlateau(plateau, jeu);
-
-					appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-					appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-					afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-					afficherScore(premier, jeu, 550, 100);
-
-					afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-					afficherScore(deuxieme, jeu, 750, 100);
-					afficherPirate(premier, deuxieme, jeu, numeroPirate);
-					SDL_Flip(jeu.ecran);
-					premier.x = deuxieme.x;
-					premier.y = deuxieme.y;
-				}
-				numeroPirate = 0;
-			}
+			jeu.finTour = true;
 		}
 	}
 }
 
-void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate)
+void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
 {
-    
-}
-
-void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur, Piece &unePiece)
-{
-
-    int x, y;
     //gestion des scores en fonction du joueur en cours
-    switch(numJoueur)
+
+    //son score = score précédent + valeur de la pièce
+    pirate.score += plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur;
+
+    //si la case cliqué precédemment est la même que la case cliqué par la suite
+    //et ceci 4 fois maximum
+    //le bonus est multiplié par 2
+	if ((pirate.last == plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur) && (pirate.nbBonus < 4))
     {
-    case 0:
-        x = premier.x / 61;
-        y = premier.x / 61;
-        //son score = score précédent + valeur de la pièce
-        premier.score += plateau.matrice[y][x].valeur;
-
-        //si la case cliqué precédemment est la même que la case cliqué par la suite
-        //et ceci 4 fois maximum
-        //le bonus est multiplié par 2
-        if((premier.last == plateau.matrice[y][x].valeur) && (premier.nbBonus < 4))
-        {
-            premier.score += premier.bonus;
-            premier.bonus=2*premier.bonus;
-            premier.nbBonus++;
-        }
-        else
-        {
-            premier.nbBonus = 0;
-            premier.bonus = 10;
-        }
-
-        //si le max est atteint, on réinitialise le bonus
-
-        if(premier.nbBonus > 4)
-        {
-            premier.nbBonus=0;
-            premier.bonus=10;
-        }
-
-        //la case est enregistré pour la traiter p
-        premier.last = plateau.matrice[y][x].valeur;
-
-        //on regarde si une des conditions de victoire est validé
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
-        break;
-
-    //on reprend le même code si on joue à deux
-    case 1:
-
-        x = deuxieme.x / 61;
-        y = deuxieme.y / 61;
-
-        deuxieme.score += plateau.matrice[y][x].valeur;
-
-        if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
-        {
-            deuxieme.score += deuxieme.bonus;
-            deuxieme.bonus=2*deuxieme.bonus;
-            deuxieme.nbBonus++;
-        }
-        else
-        {
-            deuxieme.nbBonus = 0;
-            deuxieme.bonus = 10;
-        }
-
-        if(deuxieme.nbBonus > 4)
-        {
-            deuxieme.nbBonus=0;
-            deuxieme.bonus=10;
-        }
-        deuxieme.last = plateau.matrice[y][x].valeur;
-
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
-        break;
-
-    //si on joue contre l'ia
-    case 2:
-
-        x = deuxieme.x / 61;
-        y = deuxieme.y / 61;
-
-        deuxieme.score += plateau.matrice[y][x].valeur;
-
-        if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
-        {
-            deuxieme.score += deuxieme.bonus;
-            deuxieme.bonus=2*deuxieme.bonus;
-            deuxieme.nbBonus++;
-        }
-        else
-        {
-            deuxieme.nbBonus = 0;
-            deuxieme.bonus = 10;
-        }
-
-        if(deuxieme.nbBonus > 4)
-        {
-            deuxieme.nbBonus=0;
-            deuxieme.bonus=10;
-        }
-        deuxieme.last = plateau.matrice[y][x].valeur;
-
-        victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
-        break;
+		pirate.score += pirate.bonus;
+		pirate.bonus = 2 * pirate.bonus;
+		pirate.nbBonus++;
     }
+    else
+    {
+		pirate.nbBonus = 0;
+		pirate.bonus = 10;
+    }
+
+    //si le max est atteint, on réinitialise le bonus
+
+	if (pirate.nbBonus > 4)
+    {
+		pirate.nbBonus = 0;
+		pirate.bonus = 10;
+    }
+
+    //la case est enregistré pour la traiter p
+	pirate.last = plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur;
+
+    //on regarde si une des conditions de victoire est validé
+	//victoire(pirate, jeu, plateau, unePiece);
+
+	/*
+	//si on joue contre l'ia
+	case 2:
+
+	x = deuxieme.x / 61;
+	y = deuxieme.y / 61;
+
+	deuxieme.score += plateau.matrice[y][x].valeur;
+
+	if((deuxieme.last == plateau.matrice[y][x].valeur ) && (deuxieme.nbBonus < 4))
+	{
+	deuxieme.score += deuxieme.bonus;
+	deuxieme.bonus=2*deuxieme.bonus;
+	deuxieme.nbBonus++;
+	}
+	else
+	{
+	deuxieme.nbBonus = 0;
+	deuxieme.bonus = 10;
+	}
+
+	if(deuxieme.nbBonus > 4)
+	{
+	deuxieme.nbBonus=0;
+	deuxieme.bonus=10;
+	}
+	deuxieme.last = plateau.matrice[y][x].valeur;
+
+	victoire(premier, deuxieme,  jeu, plateau, numJoueur, unePiece);
+	break;
+	*/
 }
 
-void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int &numJoueur, Piece &unePiece)
+int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate)
 {
-    int nbZero = 0;
-    int x = jeu.xSouris / premier.LARGEUR_IMAGE;
-    int y = jeu.ySouris / premier.HAUTEUR_IMAGE;
-
-    //on test les position verticales
-    for(int i = 0 ; i<7 ; i ++)
-    {
-        //si on voit un 0
-        if(plateau.matrice[i][x].valeur == 0)
-            //on incrémente son nombre
-            nbZero++;
-    }
-
-    //on test les position horizontales
-    for(int j = 0 ; j<7 ; j++)
-    {
-        //si on voit un 0
-        if(plateau.matrice[y][j].valeur == 0)
-            //on incrémente encore ce nombre
-            nbZero++;
-    }
-
     //pour le joueur 1, si son score est supérieur à 500 ou que le joueur 2 ne peut plus bouger
-    if((numJoueur==0) && ((premier.score>=500) || (nbZero==12)))
-    {
-        //encore pleins de fonction à appliquer
-        SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-        afficheGagnant(premier, jeu, 240, 13, 0);
-        SDL_Flip(jeu.ecran);
-        SDL_Delay(2000);
-        numJoueur = 0;
-        initPirate(premier, deuxieme);
-        placementPiecesTableau(plateau, unePiece);
-        jeu.solo = false;
-        jeu.duo = false;
-        jeu.menu = true;
-    }
 
-    //pour le joueur 2, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
-    if((numJoueur==1) && ((deuxieme.score>=500) || (nbZero==12)))
-    {
-        SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
-        afficheGagnant(deuxieme, jeu, 240, 13, 1);
-        SDL_Flip(jeu.ecran);
-        SDL_Delay(2000);
-        numJoueur = 0;
-        initPirate(premier, deuxieme);
-        placementPiecesTableau(plateau, unePiece);
-        jeu.solo = false;
-        jeu.duo = false;
-        jeu.menu = true;
-    }
-
+	if (pirate.score >= 500)
+	{
+		return numeroPirate;
+	}
+	else
+	{
+		return -1;
+	}
+    /*//encore pleins de fonction à appliquer
+    SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+	if (numeroPirate == 0)
+	{
+		return 0;
+	}
+	else if 
+    afficheGagnant(premier, jeu, 240, 13, 0);
+    SDL_Flip(jeu.ecran);
+    SDL_Delay(2000);
+    numJoueur = 0;
+    initPirate(premier, deuxieme);
+    placementPiecesTableau(plateau, unePiece);
+    jeu.solo = false;
+    jeu.duo = false;
+    jeu.menu = true;
+	*/
+	/*
     //pour l'ia, si son score est supérieur à 500 ou que le joueur 1 ne peut plus bouger
     if((numJoueur==2) && ((deuxieme.score>=500) || (nbZero==12)))
     {
@@ -465,6 +243,7 @@ void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau,
         jeu.duo = false;
         jeu.menu = true;
     }
+	*/
 }
 
 void cleanPirate(Joueur &pirate)
@@ -502,69 +281,39 @@ void cleanImageGagnant(Joueur &pirate)
 	SDL_FreeSurface(pirate.imageGagnantVert);
 }
 
-void direction(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate)
+void direction(Joueur &pirate, Gestion &jeu)
 {
-	if (numeroPirate == 0)
-	{
-		if (premier.y / 61 < jeu.ySouris / 61 && premier.x / 61 == jeu.xSouris / 61)
-		{
-			premier.bas = true;
-			premier.haut = false;
-			premier.gauche = false;
-			premier.droite = false;
-		}
-		else if (premier.y / 61 > jeu.ySouris / 61 && premier.x / 61 == jeu.xSouris / 61)
-		{
-			premier.bas = false;
-			premier.haut = true;
-			premier.gauche = false;
-			premier.droite = false;
-		}
-		else if (premier.x / 61 < jeu.xSouris / 61 && premier.y / 61 == jeu.ySouris / 61)
-		{
-			premier.bas = false;
-			premier.haut = false;
-			premier.droite = true;
-			premier.gauche = false;
-		}
-		else if (premier.x / 61 > jeu.xSouris / 61 && premier.y / 61 == jeu.ySouris / 61)
-		{
-			premier.bas = false;
-			premier.haut = false;
-			premier.droite = false;
-			premier.gauche = true;
-		}
-	}
+	pirate.bas = false;
+	pirate.haut = false;
+	pirate.gauche = false;
+	pirate.droite = false;
 
-	else if (numeroPirate == 1)
+	if (pirate.y / 61 < jeu.ySouris / 61 && pirate.x / 61 == jeu.xSouris / 61)
 	{
-		if (deuxieme.y / 61 < jeu.ySouris / 61 && deuxieme.x / 61 == jeu.xSouris / 61)
-		{
-			deuxieme.bas = true;
-			deuxieme.haut = false;
-			deuxieme.gauche = false;
-			deuxieme.droite = false;
-		}
-		else if (deuxieme.y / 61 > jeu.ySouris / 61 && deuxieme.x / 61 == jeu.xSouris / 61)
-		{
-			deuxieme.bas = false;
-			deuxieme.haut = true;
-			deuxieme.gauche = false;
-			deuxieme.droite = false;
-		}
-		else if (deuxieme.x / 61 < jeu.xSouris / 61 && deuxieme.y / 61 == jeu.ySouris / 61)
-		{
-			deuxieme.bas = false;
-			deuxieme.haut = false;
-			deuxieme.droite = true;
-			deuxieme.gauche = false;
-		}
-		else if (deuxieme.x / 61 > jeu.xSouris / 61 && deuxieme.y / 61 == jeu.ySouris / 61)
-		{
-			deuxieme.bas = false;
-			deuxieme.haut = false;
-			deuxieme.droite = false;
-			deuxieme.gauche = true;
-		}
+		pirate.bas = true;
+		pirate.haut = false;
+		pirate.gauche = false;
+		pirate.droite = false;
+	}
+	else if (pirate.y / 61 > jeu.ySouris / 61 && pirate.x / 61 == jeu.xSouris / 61)
+	{
+		pirate.bas = false;
+		pirate.haut = true;
+		pirate.gauche = false;
+		pirate.droite = false;
+	}
+	else if (pirate.x / 61 < jeu.xSouris / 61 && pirate.y / 61 == jeu.ySouris / 61)
+	{
+		pirate.bas = false;
+		pirate.haut = false;
+		pirate.droite = true;
+		pirate.gauche = false;
+	}
+	else if (pirate.x / 61 > jeu.xSouris / 61 && pirate.y / 61 == jeu.ySouris / 61)
+	{
+		pirate.bas = false;
+		pirate.haut = false;
+		pirate.droite = false;
+		pirate.gauche = true;
 	}
 }

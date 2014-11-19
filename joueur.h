@@ -51,15 +51,15 @@ struct Joueur
 /***********************************
 Declaration des prototype
 ************************************/
-void initPirate(Joueur &prem, Joueur &deux);
+void initPirate(Joueur &premier, Joueur &deuxieme);
 
-void afficherPirate(Joueur &prem, Joueur &deux, Gestion &jeu, int numJoueur);
+void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
 
-void deplacerPirate(Joueur &premier, Joueur &deuxieme , Plateau &plateau ,Gestion &jeu, int &numeroPirate, Piece &unePiece);
+void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau, Gestion &jeu, Piece &unePiece);
 
-void score(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int numJoueur, Piece &unePiece);
+void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece);
 
-void victoire(Joueur &premier, Joueur &deuxieme, Gestion &jeu, Plateau &plateau, int &numJoueur, Piece &unePiece);
+int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate);
 
 void cleanPirate(Joueur &pirate);
 
@@ -69,8 +69,6 @@ void cleanImageGagnant(Joueur &pirate);
 
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
 
-void marcher(Joueur &premier, Joueur &deuxieme, int &x1, int &x2, int &y1, int &y2, Plateau &plateau, int numeroPirate);
-
-void direction(Joueur &premier, Joueur &deuxieme, Gestion &jeu, int numeroPirate);
+void direction(Joueur &pirate, Gestion &jeu);
 
 #endif

@@ -20,18 +20,6 @@ int main(int argc, char* argv[])
     initPirate(premier, deuxieme);
     placementPiecesTableau(plateau, unePiece);
 
-	SDL_Surface *dessinPirate = NULL;
-	SDL_Rect unDessinPirate[2];
-	dessinPirate = chargerImageCleCouleur("pirates.png", 0, 255, 255);
-	unDessinPirate[0].x = 0;
-	unDessinPirate[0].y = 0;
-	unDessinPirate[0].h = premier.HAUTEUR_IMAGE;
-	unDessinPirate[0].w = premier.LARGEUR_IMAGE;
-	unDessinPirate[1].x = premier.HAUTEUR_IMAGE;;
-	unDessinPirate[1].y = 0;
-	unDessinPirate[1].h = premier.HAUTEUR_IMAGE;
-	unDessinPirate[1].w = premier.LARGEUR_IMAGE;
-
     SDL_Surface* menu = chargerImage("menu.bmp");
     SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
     SDL_Rect imageBouton[3];
@@ -57,7 +45,6 @@ int main(int argc, char* argv[])
 
     //creation du titre de la fenetre
     SDL_WM_SetCaption("Treasure Hunt", NULL);
-
 
     //tant qu'on est dans le jeu
     while (!jeu.quit)
@@ -85,16 +72,6 @@ int main(int argc, char* argv[])
         if (jeu.menu)
         {
 
-            /****** Prévision si on jeu revenir au menu après ********
-            int numeroPirate = 0;
-            initPirate(premier, deuxieme);
-            placementPiecesTableau(plateau, unePiece);
-            premier.score=0;
-            premier.nbBonus=0;
-            deuxieme.score=0;
-            deuxieme.nbBonus=0;
-            **********************************************************/
-
             appliquerImage(0, 0, menu, jeu.ecran);
             appliquerClip(600, 100, bouton, jeu.ecran, &imageBouton[0]);
             appliquerClip(600, 200, bouton, jeu.ecran, &imageBouton[1]);
@@ -118,57 +95,82 @@ int main(int argc, char* argv[])
                 jeu.menu = false;
                 jeu.quit = true;
             }
-
-            SDL_Flip(jeu.ecran);
-            SDL_Delay(10);
-
-
         }
-        else if(jeu.solo)
+		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
-            //affichage de l'ecran en blanc , supprime donc tout l'ecran
-            SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
-            afficherPiecePlateau(plateau, jeu);
-			afficherPirate(premier, deuxieme, jeu, numeroPirate);
-            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate, unePiece);
+			//affichage de l'ecran en blanc , supprime donc tout l'ecran
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 
-			appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-			appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
+			afficherPiecePlateau(plateau, jeu);
 			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
 			afficherScore(premier, jeu, 550, 100);
-
 			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
 			afficherScore(deuxieme, jeu, 750, 100);
+			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
+			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
 
-            SDL_Flip(jeu.ecran);
-
-            SDL_Delay(10);
+			if (!jeu.finTour)
+			{
+				if (numeroPirate == 0)
+				{
+					afficherPirate(premier, jeu, numeroPirate);
+					deplacerPirate(premier, numeroPirate, plateau, jeu, unePiece);
+					deuxieme.x = jeu.xSouris / 61 * 61;
+					deuxieme.y = jeu.ySouris / 61 * 61;
+				}
+				
+				else if (numeroPirate == 1)
+				{
+					afficherPirate(deuxieme, jeu, numeroPirate);
+					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
+					premier.x = jeu.xSouris / 61 * 61;
+					premier.y = jeu.ySouris / 61 * 61;
+				}
+			}
+			else
+			{
+				if (numeroPirate == 0)
+				{
+					numeroPirate = 1;
+				}
+				else
+				{
+					numeroPirate = 0;
+				}
+				jeu.finTour = false;
+			}
         }
 
-        else if(jeu.duo)
-        {
-            //affichage de l'ecran en blanc , supprime donc tout l'ecran
-            SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+		else if (victoire(premier, jeu, plateau, unePiece, 0) == 0)
+		{
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			afficheGagnant(premier, jeu, 240, 13, 0);
+			SDL_Flip(jeu.ecran);
+			SDL_Delay(2000);
+			numeroPirate = 0;
+			initPirate(premier, deuxieme);
+			placementPiecesTableau(plateau, unePiece);
+			jeu.solo = false;
+			jeu.duo = false;
+			jeu.menu = true;
+		}
+		else if (victoire(deuxieme, jeu, plateau, unePiece, 1) == 1)
+		{
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			afficheGagnant(deuxieme, jeu, 240, 13, 1);
+			SDL_Flip(jeu.ecran);
+			SDL_Delay(2000);
+			numeroPirate = 0;
+			initPirate(premier, deuxieme);
+			placementPiecesTableau(plateau, unePiece);
+			jeu.solo = false;
+			jeu.duo = false;
+			jeu.menu = true;
+		}
+		SDL_Flip(jeu.ecran);
 
-            afficherPiecePlateau(plateau, jeu);
-            afficherPirate(premier, deuxieme, jeu, numeroPirate);
-            deplacerPirate(premier, deuxieme, plateau, jeu, numeroPirate, unePiece);
-
-            appliquerClip(535, 30, dessinPirate, jeu.ecran, &unDessinPirate[0]);
-            appliquerClip(735, 30, dessinPirate, jeu.ecran, &unDessinPirate[1]);
-
-            afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-            afficherScore(premier, jeu, 550, 100);
-
-            afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-            afficherScore(deuxieme, jeu, 750, 100);
-
-            SDL_Flip(jeu.ecran);
-
-            SDL_Delay(10);
-        }
+		SDL_Delay(10);
     }
 
     //on supprime toutes les images
@@ -179,7 +181,6 @@ int main(int argc, char* argv[])
     cleanPirate(deuxieme);
     cleanBonus(plateau);
     cleanImageGagnant(premier);
-    SDL_FreeSurface(dessinPirate);
     SDL_FreeSurface(menu);
     SDL_FreeSurface(bouton);
 

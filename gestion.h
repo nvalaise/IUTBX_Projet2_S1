@@ -40,8 +40,11 @@ struct Gestion
 	bool menu = true;
 	bool solo = false;
 	bool duo = false;
+	bool finTour = false;
 
 	int ySouris, xSouris;
+
+	int nbZero = 0;
 };
 
 /***********************************
