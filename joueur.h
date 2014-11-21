@@ -34,11 +34,11 @@ struct Joueur
 
     int tabScores[300][300];
 
-	SDL_Surface* sprite = chargerImageCleCouleur("pirates.png", 0, 255, 255);
+	SDL_Surface* sprite = chargerImageCleCouleur("pirates.jpg", 0, 255, 255);
 	SDL_Rect image[2];
 
-	SDL_Surface* imageGagnantVert = chargerImage("gagne1.bmp");
-	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.bmp");
+	SDL_Surface* imageGagnantVert = chargerImage("gagne1.jpg");
+	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.jpg");
 
 	int x, y;
 	int score = 0;
@@ -77,11 +77,8 @@ void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate
 
 void direction(Joueur &pirate, Gestion &jeu);
 
-void directionIA(Joueur &pirate, int xDepart, int yDepart, int xmax, int ymax);
-
 void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate);
 
 void lireDonnes(Joueur &Joueur);
-
 
 #endif

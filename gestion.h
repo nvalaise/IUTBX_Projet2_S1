@@ -26,8 +26,8 @@ struct Gestion
 	const int HAUTEUR_ECRAN = 427;
 	const int BPP_ECRAN = 24;
 
-	const int LARGEUR_BOUTON = 235;
-	const int HAUTEUR_BOUTON = 59;
+	const int LARGEUR_BOUTON = 109;
+	const int HAUTEUR_BOUTON = 30;
 
 	SDL_Surface* ecran = NULL;
 	SDL_Event event;

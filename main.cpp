@@ -20,9 +20,11 @@ int main(int argc, char* argv[])
     initPirate(premier, deuxieme);
     placementPiecesTableau(plateau, unePiece);
 
-    SDL_Surface* menu = chargerImage("menu.bmp");
-    SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
-    SDL_Rect imageBouton[3];
+    SDL_Surface* menu = chargerImage("menu.jpg");
+    SDL_Surface* bouton = chargerImageCleCouleur("bouttons.jpg", 0, 255, 255);
+    SDL_Rect imageBouton[8];
+
+
     imageBouton[0].x = 0;
     imageBouton[0].y = 0;
     imageBouton[0].h = jeu.HAUTEUR_BOUTON;
@@ -37,6 +39,32 @@ int main(int argc, char* argv[])
     imageBouton[2].y = 0;
     imageBouton[2].h = jeu.HAUTEUR_BOUTON;
     imageBouton[2].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[3].x = jeu.LARGEUR_BOUTON * 3;
+	imageBouton[3].y = 0;
+	imageBouton[3].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[3].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[4].x = jeu.LARGEUR_BOUTON * 4;
+	imageBouton[4].y = 0;
+	imageBouton[4].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[4].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[5].x = jeu.LARGEUR_BOUTON * 5;
+	imageBouton[5].y = 0;
+	imageBouton[5].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[5].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[6].x = jeu.LARGEUR_BOUTON * 6;
+	imageBouton[6].y = 0;
+	imageBouton[6].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[6].w = jeu.LARGEUR_BOUTON;
+
+	imageBouton[7].x = jeu.LARGEUR_BOUTON * 7;
+	imageBouton[7].y = 0;
+	imageBouton[7].h = jeu.HAUTEUR_BOUTON;
+	imageBouton[7].w = jeu.LARGEUR_BOUTON;
+
 
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -73,28 +101,56 @@ int main(int argc, char* argv[])
         {
 
             appliquerImage(0, 0, menu, jeu.ecran);
-            appliquerClip(600, 100, bouton, jeu.ecran, &imageBouton[0]);
-            appliquerClip(600, 200, bouton, jeu.ecran, &imageBouton[1]);
-            appliquerClip(600, 300, bouton, jeu.ecran, &imageBouton[2]);
+            appliquerClip(700, 100, bouton, jeu.ecran, &imageBouton[0]);
+            appliquerClip(700, 150, bouton, jeu.ecran, &imageBouton[2]);
+            appliquerClip(700, 200, bouton, jeu.ecran, &imageBouton[4]);
+			appliquerClip(700, 250, bouton, jeu.ecran, &imageBouton[6]);
 
-            if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 100 && jeu.ySouris < 100 + jeu.HAUTEUR_BOUTON)
-            {
-                jeu.menu = false;
-                jeu.solo = true;
-            }
-            else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 200 && jeu.ySouris < 200 + jeu.HAUTEUR_BOUTON)
-            {
+            if (jeu.event.motion.x > 700 && jeu.event.motion.x < 700 + jeu.LARGEUR_BOUTON && jeu.event.motion.y > 100 && jeu.event.motion.y < 100 + jeu.HAUTEUR_BOUTON)
+			{
+				appliquerClip(700, 100, bouton, jeu.ecran, &imageBouton[1]);
+			}
+			else if (jeu.event.motion.x > 700 && jeu.event.motion.x < 700 + jeu.LARGEUR_BOUTON && jeu.event.motion.y > 150 && jeu.event.motion.y < 150 + jeu.HAUTEUR_BOUTON)
+			{
+				appliquerClip(700, 150, bouton, jeu.ecran, &imageBouton[3]);
+			}
+			else if (jeu.event.motion.x > 700 && jeu.event.motion.x < 700 + jeu.LARGEUR_BOUTON && jeu.event.motion.y > 200 && jeu.event.motion.y < 200 + jeu.HAUTEUR_BOUTON)
+			{
+				appliquerClip(700, 200, bouton, jeu.ecran, &imageBouton[5]);
+			}
+			else if (jeu.event.motion.x > 700 && jeu.event.motion.x < 700 + jeu.LARGEUR_BOUTON && jeu.event.motion.y > 250 && jeu.event.motion.y < 250 + jeu.HAUTEUR_BOUTON)
+			{
+				appliquerClip(700, 250, bouton, jeu.ecran, &imageBouton[7]);
+			}
 
-                jeu.menu = false;
-                jeu.duo = true;
+			if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 100 && jeu.ySouris < 100 + jeu.HAUTEUR_BOUTON)
+            {
+				jeu.solo = true;
+				jeu.duo = false;
+				jeu.menu = false;
+				jeu.quit = false;
             }
-            else if (jeu.xSouris > 600 && jeu.xSouris < 600 + jeu.LARGEUR_BOUTON && jeu.ySouris > 300 && jeu.ySouris < 300 + jeu.HAUTEUR_BOUTON)
+			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 150 && jeu.ySouris < 150 + jeu.HAUTEUR_BOUTON)
+            {
+				jeu.solo = false;
+				jeu.duo = true;
+				jeu.menu = false;
+				jeu.quit = false;
+            }
+			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 200 && jeu.ySouris < 200 + jeu.HAUTEUR_BOUTON)
             {
                 jeu.solo = false;
                 jeu.duo = false;
                 jeu.menu = false;
                 jeu.quit = true;
             }
+			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 250 && jeu.ySouris < 250 + jeu.HAUTEUR_BOUTON)
+			{
+				jeu.solo = false;
+				jeu.duo = false;
+				jeu.menu = false;
+				jeu.quit = true;
+			}
         }
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
