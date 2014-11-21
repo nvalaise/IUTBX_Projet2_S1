@@ -53,6 +53,11 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate)
     {
         appliquerClip(pirate.x, pirate.y, pirate.sprite, jeu.ecran, &pirate.image[1]);
     }
+
+    else if (numeroPirate == 2)
+    {
+        appliquerClip(pirate.x, pirate.y, pirate.sprite, jeu.ecran, &pirate.image[1]);
+    }
 }
 
 /******FONCTION DE DEPLACEMENT DU PIRATE******
@@ -68,69 +73,176 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
     int xSourisMatrice = jeu.xSouris / 61;
     int ySourisMatrice = jeu.ySouris / 61;
 
-    const int VITESSE = 3;
+    int xDepart = pirate.x/61;
+    int yDepart = pirate.y/61;
 
-    if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427 && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0)
+    int maximum=0;
+
+    //cout << "je commence ici : " << endl << xDepart << ":" << yDepart << endl ;
+
+    const int VITESSE = 3;
+    if((numeroPirate==0) || (numeroPirate==1))
     {
-        direction(pirate, jeu);
-        if (pirate.bas)
+        if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427
+                && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0 && ((numeroPirate==0) || (numeroPirate==1)))
         {
-            score(pirate, jeu, plateau, unePiece);
-            while (pirate.y < ySourisMatrice * 61)
+            //cout << "test de la direction" << endl ;
+            direction(pirate, jeu);
+            if (pirate.bas)
+            {
+                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+                while (pirate.y < ySourisMatrice * 61)
+                {
+                    pirate.y += VITESSE;
+                    afficherPiecePlateau(plateau, jeu);
+                    afficherPirate(pirate, jeu, numeroPirate);
+                    SDL_Flip(jeu.ecran);
+                    jeu.finTour = false;
+                }
+                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+                jeu.finTour = true;
+            }
+            else if (pirate.haut)
+            {
+                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+                while (pirate.y > ySourisMatrice * 61)
+                {
+                    pirate.y -= VITESSE;
+                    afficherPiecePlateau(plateau, jeu);
+                    afficherPirate(pirate, jeu, numeroPirate);
+                    SDL_Flip(jeu.ecran);
+                    jeu.finTour = false;
+                }
+                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+                jeu.finTour = true;
+            }
+            else if (pirate.droite)
+            {
+                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+                while (pirate.x < xSourisMatrice * 61)
+                {
+                    pirate.x += VITESSE;
+                    afficherPiecePlateau(plateau, jeu);
+                    afficherPirate(pirate, jeu, numeroPirate);
+                    SDL_Flip(jeu.ecran);
+                    jeu.finTour = false;
+                }
+                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+                jeu.finTour = true;
+            }
+            else if (pirate.gauche)
+            {
+                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+                while (pirate.x > xSourisMatrice * 61)
+                {
+                    pirate.x -= VITESSE;
+                    afficherPiecePlateau(plateau, jeu);
+                    afficherPirate(pirate, jeu, numeroPirate);
+                    SDL_Flip(jeu.ecran);
+                    jeu.finTour = false;
+                }
+                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+                jeu.finTour = true;
+            }
+        }
+    }
+    else if(numeroPirate==2)
+    {
+        //les coordonnées de la matrice en entrée
+        //initialisation des options
+        int ymax, xmax;
+
+        for(int i = 0; i<7; i++)
+        {
+            //on rehcerche le maximum
+            if(plateau.matrice[i][xDepart].valeur > maximum)
+            {
+                maximum = plateau.matrice[xDepart][i].valeur;
+                ymax = i;
+                xmax = xDepart;
+            }
+            if(plateau.matrice[yDepart][i].valeur > maximum)
+            {
+                maximum = plateau.matrice[yDepart][i].valeur;
+                ymax = yDepart;
+                xmax = i;
+            }
+        }
+
+        //ici, ymax et xmam contienne les coordonnées de la valeur max sur la ligne ou la colonne
+        //cout << "départ        : " << pirate.x/61 << ":" << pirate.y/61 << endl ;
+        //cout << "fin (maximum) : " << xmax << ":" << ymax << endl ;
+
+        //directionIA(pirate, xDepart, yDepart, xmax, ymax);
+
+        if (pirate.y/61 < ymax  && pirate.x/61 == xmax )
+        {
+            //cout << "vers bas" << endl ;
+            score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
+            while (pirate.y < ymax * 61)
             {
                 pirate.y += VITESSE;
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
                 afficherPiecePlateau(plateau, jeu);
-
                 afficherPirate(pirate, jeu, numeroPirate);
                 SDL_Flip(jeu.ecran);
                 jeu.finTour = false;
             }
+            plateau.matrice[ymax][xmax].valeur = 0;;
+            pirate.y = ymax * 61;
             jeu.finTour = true;
         }
-        else if (pirate.haut)
+        else if (pirate.y/61 > ymax  && pirate.x/61 == xmax )
         {
-            score(pirate, jeu, plateau, unePiece);
-            while (pirate.y > ySourisMatrice * 61)
+            //cout << "vers haut" << endl ;
+            score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
+            while (pirate.y > ymax * 61)
             {
                 pirate.y -= VITESSE;
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
                 afficherPiecePlateau(plateau, jeu);
-
                 afficherPirate(pirate, jeu, numeroPirate);
                 SDL_Flip(jeu.ecran);
+                jeu.finTour = false;
             }
+            plateau.matrice[ymax][xmax].valeur = 0;;
+            pirate.y = ymax * 61;
             jeu.finTour = true;
         }
-        else if (pirate.droite)
+        else if (pirate.x/61 < xmax  && pirate.y/61 == ymax )
         {
-            score(pirate, jeu, plateau, unePiece);
-            while (pirate.x < xSourisMatrice * 61)
+            //cout << "vers droite" << endl ;
+
+            score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
+            while (pirate.x < xmax * 61)
             {
                 pirate.x += VITESSE;
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
                 afficherPiecePlateau(plateau, jeu);
-
                 afficherPirate(pirate, jeu, numeroPirate);
                 SDL_Flip(jeu.ecran);
+                jeu.finTour = false;
             }
+            plateau.matrice[ymax][xmax].valeur = 0;;
+            pirate.x = xmax * 61;
             jeu.finTour = true;
         }
-        else if (pirate.gauche)
+        else if (pirate.x/61 > xmax  && pirate.y/61 == ymax )
         {
-            score(pirate, jeu, plateau, unePiece);
-            while (pirate.x > xSourisMatrice * 61)
+            //cout << "vers gauche" << endl ;
+
+            score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
+            while (pirate.x > xmax * 61)
             {
                 pirate.x -= VITESSE;
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
                 afficherPiecePlateau(plateau, jeu);
-
                 afficherPirate(pirate, jeu, numeroPirate);
                 SDL_Flip(jeu.ecran);
+                jeu.finTour = false;
             }
+            plateau.matrice[ymax][xmax].valeur = 0;;
+            pirate.x = xmax * 61;
             jeu.finTour = true;
         }
     }
+
     if (jeu.finTour)
     {
         pirate.tour++;
@@ -152,17 +264,17 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
     }
 }
 
-void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
+void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &unePiece)
 {
     //gestion des scores en fonction du joueur en cours
 
     //son score = score précédent + valeur de la pièce
-    pirate.score += plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur;
+    pirate.score += plateau.matrice[y][x].valeur;
 
     //si la case cliqué precédemment est la même que la case cliqué par la suite
     //et ceci 4 fois maximum
     //le bonus est multiplié par 2
-    if (pirate.last == plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur && pirate.nbBonus < 4)
+    if (pirate.last == plateau.matrice[y][x].valeur && pirate.nbBonus < 4)
     {
         pirate.score += pirate.bonus;
         pirate.bonus = 2 * pirate.bonus;
@@ -182,7 +294,7 @@ void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece)
         pirate.bonus = 10;
     }
 
-    pirate.last = plateau.matrice[jeu.ySouris / 61][jeu.xSouris / 61].valeur;
+    pirate.last = plateau.matrice[y][x].valeur;
 
 }
 
@@ -280,8 +392,6 @@ void direction(Joueur &pirate, Gestion &jeu)
     }
 }
 
-
-
 void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate)
 {
 
@@ -303,7 +413,7 @@ void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate)
         break;
 
     case 2:
-        //f << "ia " << deuxieme.tour << " " << 500-premier.score << " " ;
+        f << "3 " << deuxieme.tour << " " << 500-premier.score << " " ;
         break;
     }
 
@@ -319,6 +429,8 @@ void lireDonnes(Joueur &pirates)
     int meilleurDiff=0;
     int playerOne =0;
     int playerTwo =0;
+    int playerIA =0;
+    int tmp=0;
 
     fstream f;
     f.open("scores.txt" , ios::in );
@@ -353,7 +465,7 @@ void lireDonnes(Joueur &pirates)
         {
             meilleurDiff = pirates.tabScores[k][2] ;
         }
-
+/*
         if(pirates.tabScores[k][0] == 1 )
         {
             playerOne++;
@@ -362,13 +474,74 @@ void lireDonnes(Joueur &pirates)
         if(pirates.tabScores[k][0] == 2 )
         {
             playerTwo++;
+        }*/
+
+        if(pirates.tabScores[k][0] == 3 )
+        {
+            playerIA++;
         }
     }
 
-    cout << "     ----- BEST SCORES -----" << endl ;
-    cout << "Victoires en moins de tours : " << meilleurTour << endl ;
-    cout << "Victoires avec le plus gros écart : " << meilleurDiff << endl;
-    cout << "Nombre de victoires du joueur 1 : " << playerOne << endl ;
-    cout << "Nombre de victoires du joueur 2 : " << playerTwo << endl << endl  ;
+
+
+    for(int i=0; i<parties ; i++)
+    {
+        for(int j=i; j<parties; j++)
+        {
+            //trie du nombre de tour
+            if(pirates.tabScores[j][1]<pirates.tabScores[i][1])
+            {
+                tmp=pirates.tabScores[i][1];
+                pirates.tabScores[i][1]=pirates.tabScores[j][1];
+                pirates.tabScores[j][1]=tmp;
+            }
+        }
+    }
+
+
+    for(int i=26; i!=0; i--)
+    {
+        for(int j=0; j<i; j++)
+        {
+            //trie de la différence
+            if(pirates.tabScores[j][2]<pirates.tabScores[i+1][2])
+            {
+                tmp=pirates.tabScores[j][2];
+                pirates.tabScores[j][2]=pirates.tabScores[j+1][2];
+                pirates.tabScores[j+1][2]=tmp;
+            }
+        }
+    }
+    cout << "----- BEST SCORES -----" << endl ;
+    cout << "Classement des parties les plus courtes" << endl ;
+    for(int i=0; i<5; i++)
+    {
+        if(i<9)
+        {
+            cout << i+1 << ".  " << pirates.tabScores[i][1] << endl ;
+        }
+        else
+        {
+            cout << i+1 << ". " << pirates.tabScores[i][1] << endl ;
+        }
+    }
+
+    cout << "Classement des plus grandes différences" << endl ;
+    for(int i=0; i<5; i++)
+    {
+        if(i<9)
+        {
+            cout << i+1 << ".  " << pirates.tabScores[i][2] << endl ;
+        }
+        else
+        {
+            cout << i+1 << ". " << pirates.tabScores[i][2] << endl ;
+        }
+    }
+    /*    cout << "Victoires en moins de tours : " << meilleurTour << endl ;
+        cout << "Victoires avec le plus gros écart : " << meilleurDiff << endl;
+        cout << "Nombre de victoires du joueur 1 : " << playerOne << endl ;
+        cout << "Nombre de victoires du joueur 2 : " << playerTwo << endl ;
+        cout << "Nombre de victoires de l'IA     : " << playerIA << endl << endl  ;*/
 }
 

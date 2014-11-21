@@ -98,6 +98,53 @@ int main(int argc, char* argv[])
         }
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
+			//affichage de l'ecran en blanc , supprime donc tout l'ecran
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+
+			afficherPiecePlateau(plateau, jeu);
+			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
+			afficherScore(premier, jeu, 550, 100);
+			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
+			afficherScore(deuxieme, jeu, 750, 100);
+			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
+			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+
+			if (!jeu.finTour)
+			{
+				if (numeroPirate == 0)
+				{
+					afficherPirate(premier, jeu, numeroPirate);
+					deplacerPirate(premier, numeroPirate, plateau, jeu, unePiece);
+					deuxieme.x = jeu.xSouris / 61 * 61;
+					deuxieme.y = jeu.ySouris / 61 * 61;
+
+				}
+
+				else if (numeroPirate == 2)
+				{
+					afficherPirate(deuxieme, jeu, numeroPirate);
+					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
+					premier.x = deuxieme.x;
+					premier.y = deuxieme.y;
+
+					//cout << "coordonnées attribués (au j1), " << premier.x << ":" << premier.y << endl;
+				}
+			}
+			else
+			{
+				if (numeroPirate == 0)
+				{
+					numeroPirate = 2;
+				}
+				else
+				{
+					numeroPirate = 0;
+				}
+				jeu.finTour = false;
+			}
+        }
+        else if (jeu.duo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
+        {
 
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
@@ -157,9 +204,10 @@ int main(int argc, char* argv[])
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
+			jeu.finTour=false;
 			jeu.nbZero = 0;
 		}
-		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1)
+		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1 || victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
 			afficheGagnant(deuxieme, jeu, 240, 13, 1);
@@ -172,6 +220,7 @@ int main(int argc, char* argv[])
 			jeu.solo = false;
 			jeu.duo = false;
 			jeu.menu = true;
+            jeu.finTour=false;
 			premier.tour=0;
             deuxieme.tour=0;
 			jeu.nbZero = 0;

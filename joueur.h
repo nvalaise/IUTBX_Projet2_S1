@@ -63,7 +63,7 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
 
 void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau, Gestion &jeu, Piece &unePiece);
 
-void score(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece);
+void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &unePiece);
 
 int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate);
 
@@ -76,6 +76,8 @@ void cleanImageGagnant(Joueur &pirate);
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate);
 
 void direction(Joueur &pirate, Gestion &jeu);
+
+void directionIA(Joueur &pirate, int xDepart, int yDepart, int xmax, int ymax);
 
 void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate);
 
