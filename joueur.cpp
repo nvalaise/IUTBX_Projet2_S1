@@ -147,7 +147,10 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
         }
     }
     else if(numeroPirate==2)
-    {
+	{
+		afficherPirate(pirate, jeu, numeroPirate);
+		SDL_Flip(jeu.ecran);
+		SDL_Delay(1000);
         //les coordonnées de la matrice en entrée
         //initialisation des options
         int ymax, xmax;
@@ -168,6 +171,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
                 xmax = i;
             }
         }
+		
 
         //ici, ymax et xmam contienne les coordonnées de la valeur max sur la ligne ou la colonne
         //cout << "départ        : " << pirate.x/61 << ":" << pirate.y/61 << endl ;
@@ -175,7 +179,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 
         //directionIA(pirate, xDepart, yDepart, xmax, ymax);
 
-        if (pirate.y/61 < ymax  && pirate.x/61 == xmax )
+        if (pirate.y/61 < ymax  && pirate.x/61 == xmax)
         {
             //cout << "vers bas" << endl ;
             score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
@@ -190,9 +194,10 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
             plateau.matrice[ymax][xmax].valeur = 0;;
             pirate.y = ymax * 61;
             jeu.finTour = true;
+
         }
         else if (pirate.y/61 > ymax  && pirate.x/61 == xmax )
-        {
+		{
             //cout << "vers haut" << endl ;
             score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
             while (pirate.y > ymax * 61)
@@ -210,7 +215,6 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
         else if (pirate.x/61 < xmax  && pirate.y/61 == ymax )
         {
             //cout << "vers droite" << endl ;
-
             score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
             while (pirate.x < xmax * 61)
             {
@@ -227,7 +231,6 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
         else if (pirate.x/61 > xmax  && pirate.y/61 == ymax )
         {
             //cout << "vers gauche" << endl ;
-
             score(pirate, xmax , ymax ,jeu,  plateau, unePiece);
             while (pirate.x > xmax * 61)
             {
@@ -261,7 +264,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
                 jeu.nbZero++;
             }
         }
-    }
+	}
 }
 
 void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &unePiece)
@@ -296,6 +299,19 @@ void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &
 
     pirate.last = plateau.matrice[y][x].valeur;
 
+	if (pirate.last == 10 || pirate.last == 20 || pirate.last == 30 || pirate.last == 50)
+	{
+		Mix_PlayChannel(1, jeu.sonPiece, 0);
+	}
+	else if (pirate.last == 100)
+	{
+		Mix_PlayChannel(1, jeu.sonPieceCent, 0);
+	}
+
+	if (pirate.score >= 450)
+	{
+		Mix_PlayChannel(1, jeu.sonResteCinquante, 0);
+	}
 }
 
 int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate)

@@ -12,6 +12,7 @@ Declaration des includes
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 /***********************************
 Declaration des constantes
@@ -41,6 +42,8 @@ struct Gestion
 	bool solo = false;
 	bool duo = false;
 	bool finTour = false;
+
+	Mix_Chunk *sonPiece, *sonNiveauTermine, *sonPieceCent, *sonResteCinquante, *sonPerdu;
 
 	int ySouris, xSouris;
 	int nbZero = 0;

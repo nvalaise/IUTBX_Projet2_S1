@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
     SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
     SDL_Rect imageBouton[8];
 
-
     imageBouton[0].x = 0;
     imageBouton[0].y = 0;
     imageBouton[0].h = jeu.HAUTEUR_BOUTON;
@@ -74,6 +73,24 @@ int main(int argc, char* argv[])
     //creation du titre de la fenetre
     SDL_WM_SetCaption("Treasure Hunt", NULL);
 
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) //Initialisation de l'API Mixer
+	{
+		cout <<Mix_GetError() << endl;
+	}
+	Mix_AllocateChannels(10);
+	
+	jeu.sonPiece = Mix_LoadWAV("piece.wav");
+	jeu.sonNiveauTermine = Mix_LoadWAV("niveau-termine.wav");
+	jeu.sonPieceCent = Mix_LoadWAV("power-up.wav");
+	jeu.sonResteCinquante = Mix_LoadWAV("hurry-up.wav");
+	jeu.sonPerdu = Mix_LoadWAV("game-over.wav");
+
+	Mix_VolumeChunk(jeu.sonPiece, MIX_MAX_VOLUME / 2);
+	Mix_VolumeChunk(jeu.sonNiveauTermine, MIX_MAX_VOLUME/2);
+	Mix_VolumeChunk(jeu.sonPieceCent, MIX_MAX_VOLUME/2);
+	Mix_VolumeChunk(jeu.sonResteCinquante, MIX_MAX_VOLUME/2);
+	Mix_VolumeChunk(jeu.sonPerdu, MIX_MAX_VOLUME / 2);
+
     //tant qu'on est dans le jeu
     while (!jeu.quit)
     {
@@ -99,7 +116,6 @@ int main(int argc, char* argv[])
 
         if (jeu.menu)
         {
-
             appliquerImage(0, 0, menu, jeu.ecran);
             appliquerClip(700, 100, bouton, jeu.ecran, &imageBouton[0]);
             appliquerClip(700, 150, bouton, jeu.ecran, &imageBouton[2]);
@@ -155,7 +171,7 @@ int main(int argc, char* argv[])
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
-			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 
 			afficherPiecePlateau(plateau, jeu);
 			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
@@ -173,7 +189,6 @@ int main(int argc, char* argv[])
 					deplacerPirate(premier, numeroPirate, plateau, jeu, unePiece);
 					deuxieme.x = jeu.xSouris / 61 * 61;
 					deuxieme.y = jeu.ySouris / 61 * 61;
-
 				}
 
 				else if (numeroPirate == 2)
@@ -182,7 +197,6 @@ int main(int argc, char* argv[])
 					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
 					premier.x = deuxieme.x;
 					premier.y = deuxieme.y;
-
 					//cout << "coordonnées attribués (au j1), " << premier.x << ":" << premier.y << endl;
 				}
 			}
@@ -203,7 +217,7 @@ int main(int argc, char* argv[])
         {
 
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
-			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 
 			afficherPiecePlateau(plateau, jeu);
 			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
@@ -247,11 +261,12 @@ int main(int argc, char* argv[])
 
 		else if (victoire(premier, jeu, plateau, unePiece, numeroPirate) == 0)
 		{
-			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 			afficheGagnant(premier, jeu, 240, 13, 0);
             sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
-			SDL_Delay(2000);
+			Mix_PlayChannel(1, jeu.sonNiveauTermine, 0);
+			SDL_Delay(5000);
 			numeroPirate = 0;
 			initPirate(premier, deuxieme);
 			placementPiecesTableau(plateau, unePiece);
@@ -265,11 +280,20 @@ int main(int argc, char* argv[])
 		}
 		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1 || victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
 		{
-			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 255, 255, 255));
+			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 			afficheGagnant(deuxieme, jeu, 240, 13, 1);
             sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
-			SDL_Delay(2000);
+			if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
+			{
+				Mix_PlayChannel(1, jeu.sonPerdu, 0);
+				SDL_Delay(3000);
+			}
+			else
+			{
+				Mix_PlayChannel(1, jeu.sonNiveauTermine, 0);
+				SDL_Delay(5000);
+			}
 			numeroPirate = 0;
 			initPirate(premier, deuxieme);
 			placementPiecesTableau(plateau, unePiece);
@@ -297,6 +321,13 @@ int main(int argc, char* argv[])
     SDL_FreeSurface(menu);
     SDL_FreeSurface(bouton);
 
+	Mix_FreeChunk(jeu.sonPiece);
+	Mix_FreeChunk(jeu.sonNiveauTermine);
+	Mix_FreeChunk(jeu.sonPieceCent);
+	Mix_FreeChunk(jeu.sonResteCinquante);
+	Mix_FreeChunk(jeu.sonPerdu);
+
+	Mix_CloseAudio();
     TTF_Quit();
     SDL_Quit();
 
