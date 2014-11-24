@@ -31,11 +31,11 @@ struct Plateau
 {
 	Piece matrice[NB_BLOCK_HAUTEUR][NB_BLOCK_LARGEUR];
 
-	SDL_Surface* bonus1 = chargerImageCleCouleur("bonus1.jpg", 0, 255, 255);
-	SDL_Surface* bonus2 = chargerImageCleCouleur("bonus2.jpg", 0, 255, 255);
-	SDL_Surface* bonus3 = chargerImageCleCouleur("bonus3.jpg", 0, 255, 255);
-	SDL_Surface* bonus4 = chargerImageCleCouleur("bonus4.jpg", 0, 255, 255);
-	SDL_Surface* bonus5 = chargerImageCleCouleur("bonus5.jpg", 0, 255, 255);
+	SDL_Surface* bonus1 = chargerImageCleCouleur("bonus1.png", 0, 255, 255);
+	SDL_Surface* bonus2 = chargerImageCleCouleur("bonus2.png", 0, 255, 255);
+	SDL_Surface* bonus3 = chargerImageCleCouleur("bonus3.png", 0, 255, 255);
+	SDL_Surface* bonus4 = chargerImageCleCouleur("bonus4.png", 0, 255, 255);
+	SDL_Surface* bonus5 = chargerImageCleCouleur("bonus5.png", 0, 255, 255);
 };
 
 /***********************************

@@ -34,11 +34,11 @@ struct Joueur
 
     int tabScores[300][300];
 
-	SDL_Surface* sprite = chargerImageCleCouleur("pirates.jpg", 0, 255, 255);
+	SDL_Surface* sprite = chargerImageCleCouleur("pirates.png", 0, 255, 255);
 	SDL_Rect image[2];
 
-	SDL_Surface* imageGagnantVert = chargerImage("gagne1.jpg");
-	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.jpg");
+	SDL_Surface* imageGagnantVert = chargerImage("gagne1.png");
+	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.png");
 
 	int x, y;
 	int score = 0;

@@ -20,8 +20,8 @@ int main(int argc, char* argv[])
     initPirate(premier, deuxieme);
     placementPiecesTableau(plateau, unePiece);
 
-    SDL_Surface* menu = chargerImage("menu.jpg");
-    SDL_Surface* bouton = chargerImageCleCouleur("bouttons.jpg", 0, 255, 255);
+    SDL_Surface* menu = chargerImage("menu.png");
+    SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
     SDL_Rect imageBouton[8];
 
 
