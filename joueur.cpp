@@ -77,6 +77,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
     int yDepart = pirate.y/61;
 
     int maximum=0;
+    int altern=0;
 
     //cout << "je commence ici : " << endl << xDepart << ":" << yDepart << endl ;
 
@@ -153,25 +154,63 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 		SDL_Delay(1000);
         //les coordonnées de la matrice en entrée
         //initialisation des options
+               //les coordonnées de la matrice en entrée
+        //initialisation des options
         int ymax, xmax;
+        int yaltern, xaltern;
 
         for(int i = 0; i<7; i++)
         {
-            //on rehcerche le maximum
+            //on rehcerche le maximum...
+            //...sur la colonne
             if(plateau.matrice[i][xDepart].valeur > maximum)
             {
-                maximum = plateau.matrice[xDepart][i].valeur;
+                maximum = plateau.matrice[i][xDepart].valeur;
                 ymax = i;
                 xmax = xDepart;
             }
+            //..sur la ligne
             if(plateau.matrice[yDepart][i].valeur > maximum)
             {
                 maximum = plateau.matrice[yDepart][i].valeur;
                 ymax = yDepart;
                 xmax = i;
             }
+
+
+            //on recherche une valeur aléatoire
+            if(plateau.matrice[i][xDepart].valeur > altern && i!=ymax)
+            {
+                altern = plateau.matrice[i][xDepart].valeur;
+                yaltern = i;
+                xaltern = xDepart;
+            }
+            if(plateau.matrice[yDepart][i].valeur > altern && i!=xmax)
+            {
+                altern = plateau.matrice[yDepart][i].valeur;
+                yaltern = yDepart;
+                xaltern = i;
+            }
         }
-		
+
+        //on vérifie que l'ia ne donne pas de pièces
+        //trop élevées au joueur
+        for(int i = 0; i<7; i++)
+        {
+            if(plateau.matrice[ymax][i].valeur > maximum)
+            {
+                ymax = yaltern ;
+                xmax = xaltern ;
+            }
+
+            if(plateau.matrice[i][xmax].valeur > maximum)
+            {
+                ymax = yaltern ;
+                xmax = xaltern ;
+            }
+        }
+
+
 
         //ici, ymax et xmam contienne les coordonnées de la valeur max sur la ligne ou la colonne
         //cout << "départ        : " << pirate.x/61 << ":" << pirate.y/61 << endl ;
