@@ -64,6 +64,8 @@ int main(int argc, char* argv[])
 	imageBouton[7].h = jeu.HAUTEUR_BOUTON;
 	imageBouton[7].w = jeu.LARGEUR_BOUTON;
 
+	jeu.sonOn = chargerImage("haut_parleur_on.png");
+	jeu.sonOff = chargerImage("haut_parleur_off.png");
 
     //initialise la sdl et creer l'encran plus le titre de la fenetre en parametre
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -84,12 +86,6 @@ int main(int argc, char* argv[])
 	jeu.sonPieceCent = Mix_LoadWAV("power-up.wav");
 	jeu.sonResteCinquante = Mix_LoadWAV("hurry-up.wav");
 	jeu.sonPerdu = Mix_LoadWAV("game-over.wav");
-
-	Mix_VolumeChunk(jeu.sonPiece, MIX_MAX_VOLUME / 2);
-	Mix_VolumeChunk(jeu.sonNiveauTermine, MIX_MAX_VOLUME/2);
-	Mix_VolumeChunk(jeu.sonPieceCent, MIX_MAX_VOLUME/2);
-	Mix_VolumeChunk(jeu.sonResteCinquante, MIX_MAX_VOLUME/2);
-	Mix_VolumeChunk(jeu.sonPerdu, MIX_MAX_VOLUME / 2);
 
     //tant qu'on est dans le jeu
     while (!jeu.quit)
@@ -167,9 +163,39 @@ int main(int argc, char* argv[])
 				jeu.menu = false;
 				jeu.quit = true;
 			}
+
         }
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
+			if (jeu.sonActive)
+			{
+				Mix_VolumeChunk(jeu.sonPiece, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonNiveauTermine, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonPieceCent, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonResteCinquante, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonPerdu, MIX_MAX_VOLUME / 2);
+			}
+			else
+			{
+				Mix_VolumeChunk(jeu.sonPiece, 0);
+				Mix_VolumeChunk(jeu.sonNiveauTermine, 0);
+				Mix_VolumeChunk(jeu.sonPieceCent, 0);
+				Mix_VolumeChunk(jeu.sonResteCinquante, 0);
+				Mix_VolumeChunk(jeu.sonPerdu, 0);
+			}
+			if (jeu.xSouris > 820 && jeu.xSouris < 870 && jeu.ySouris > 10 && jeu.ySouris < 60)
+			{
+				if (jeu.sonActive)
+				{
+					jeu.sonActive = false;
+				}
+				else
+				{
+					jeu.sonActive = true;
+				}
+				jeu.xSouris = 0;
+				jeu.ySouris = 0;
+			}
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 
@@ -180,6 +206,16 @@ int main(int argc, char* argv[])
 			afficherScore(deuxieme, jeu, 750, 100);
 			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
 			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+
+			if (jeu.sonActive)
+			{
+				appliquerImage(820, 10, jeu.sonOn, jeu.ecran);
+			}
+			else
+			{
+				appliquerImage(820, 10, jeu.sonOff, jeu.ecran);
+			}
+			
 
 			if (!jeu.finTour)
 			{
@@ -215,7 +251,36 @@ int main(int argc, char* argv[])
         }
         else if (jeu.duo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
-
+			if (jeu.sonActive)
+			{
+				Mix_VolumeChunk(jeu.sonPiece, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonNiveauTermine, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonPieceCent, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonResteCinquante, MIX_MAX_VOLUME / 2);
+				Mix_VolumeChunk(jeu.sonPerdu, MIX_MAX_VOLUME / 2);
+			}
+			else
+			{
+				Mix_VolumeChunk(jeu.sonPiece, 0);
+				Mix_VolumeChunk(jeu.sonNiveauTermine, 0);
+				Mix_VolumeChunk(jeu.sonPieceCent, 0);
+				Mix_VolumeChunk(jeu.sonResteCinquante, 0);
+				Mix_VolumeChunk(jeu.sonPerdu, 0);
+			}
+			if (jeu.xSouris > 820 && jeu.xSouris < 870 && jeu.ySouris > 10 && jeu.ySouris < 60)
+			{
+				if (jeu.sonActive)
+				{
+					jeu.sonActive = false;
+				}
+				else
+				{
+					jeu.sonActive = true;
+				}
+				jeu.xSouris = 0;
+				jeu.ySouris = 0;
+			}
+			
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 
@@ -226,6 +291,15 @@ int main(int argc, char* argv[])
 			afficherScore(deuxieme, jeu, 750, 100);
 			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
 			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+
+			if (jeu.sonActive)
+			{
+				appliquerImage(820, 10, jeu.sonOn, jeu.ecran);
+			}
+			else
+			{
+				appliquerImage(820, 10, jeu.sonOff, jeu.ecran);
+			}
 
 			if (!jeu.finTour)
 			{
@@ -276,6 +350,7 @@ int main(int argc, char* argv[])
 			jeu.duo = false;
 			jeu.menu = true;
 			jeu.finTour=false;
+			jeu.sonBientotFin = true;
 			jeu.nbZero = 0;
 		}
 		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1 || victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
@@ -301,6 +376,7 @@ int main(int argc, char* argv[])
 			jeu.duo = false;
 			jeu.menu = true;
             jeu.finTour=false;
+			jeu.sonBientotFin = true;
 			premier.tour=0;
             deuxieme.tour=0;
 			jeu.nbZero = 0;
@@ -312,6 +388,8 @@ int main(int argc, char* argv[])
 
     //on supprime toutes les images
     SDL_FreeSurface(jeu.ecran);
+	SDL_FreeSurface(jeu.sonOn);
+	SDL_FreeSurface(jeu.sonOff);
 
     cleanPiece(unePiece);
     cleanPirate(premier);
@@ -319,7 +397,7 @@ int main(int argc, char* argv[])
     cleanBonus(plateau);
     cleanImageGagnant(premier);
     SDL_FreeSurface(menu);
-    SDL_FreeSurface(bouton);
+	SDL_FreeSurface(bouton);
 
 	Mix_FreeChunk(jeu.sonPiece);
 	Mix_FreeChunk(jeu.sonNiveauTermine);

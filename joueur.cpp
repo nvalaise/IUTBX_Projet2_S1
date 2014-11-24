@@ -347,7 +347,7 @@ void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &
 		Mix_PlayChannel(1, jeu.sonPieceCent, 0);
 	}
 
-	if (pirate.score >= 450)
+	if (pirate.score >= 450 && jeu.sonBientotFin)
 	{
 		Mix_PlayChannel(1, jeu.sonResteCinquante, 0);
 	}

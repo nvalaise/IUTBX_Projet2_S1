@@ -30,7 +30,7 @@ struct Gestion
 	const int LARGEUR_BOUTON = 109;
 	const int HAUTEUR_BOUTON = 30;
 
-	SDL_Surface* ecran = NULL;
+	SDL_Surface *ecran, *sonOn, *sonOff = NULL;
 	SDL_Event event;
 
 	//pour appuyer sur les touches du clavier
@@ -42,6 +42,8 @@ struct Gestion
 	bool solo = false;
 	bool duo = false;
 	bool finTour = false;
+	bool sonBientotFin = true;
+	bool sonActive = true;
 
 	Mix_Chunk *sonPiece, *sonNiveauTermine, *sonPieceCent, *sonResteCinquante, *sonPerdu;
 
