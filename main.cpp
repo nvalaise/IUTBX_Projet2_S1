@@ -391,7 +391,7 @@ int main(int argc, char* argv[])
             afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
             afficheMot("Tours", 750, 200, 15, jeu, "police.ttf");
             afficherScore(premier, jeu, 775, 225, 3);
-            afficherScore(deuxieme, jeu, 775, 225, 4);
+            afficherScore(deuxieme, jeu, 55, 225, 4);
 
 
             sauvegarder(premier, deuxieme, numeroPirate);
@@ -419,7 +419,7 @@ int main(int argc, char* argv[])
             afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
             afficheMot("Tours", 750, 200, 15, jeu, "police.ttf");
             afficherScore(deuxieme, jeu, 775, 225, 3);
-            afficherScore(premier, jeu, 100, 225, 5);
+            afficherScore(premier, jeu, 55, 225, 5);
 
 
 

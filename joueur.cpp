@@ -433,6 +433,10 @@ void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y, int num)
         score << 500-pirate.score;
         afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
         break;
+    case 5:
+        score << 500-pirate.score;
+        afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
     }
 
 }
