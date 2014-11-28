@@ -70,6 +70,8 @@ int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, in
 
 void cleanPirate(Joueur &pirate);
 
+void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int num);
+
 void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y);
 
 void cleanImageGagnant(Joueur &pirate);

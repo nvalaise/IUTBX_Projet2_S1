@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
     placementPiecesTableau(plateau, unePiece);
 
     SDL_Surface* menu = chargerImage("menu.png");
+    SDL_Surface* score = chargerImage("score.jpg");
     SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
     SDL_Rect imageBouton[8];
 
@@ -80,7 +81,7 @@ int main(int argc, char* argv[])
 		cout <<Mix_GetError() << endl;
 	}
 	Mix_AllocateChannels(10);
-	
+
 	jeu.sonPiece = Mix_LoadWAV("piece.wav");
 	jeu.sonNiveauTermine = Mix_LoadWAV("niveau-termine.wav");
 	jeu.sonPieceCent = Mix_LoadWAV("power-up.wav");
@@ -141,6 +142,8 @@ int main(int argc, char* argv[])
 				jeu.duo = false;
 				jeu.menu = false;
 				jeu.quit = false;
+                jeu.score = false;
+
             }
 			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 150 && jeu.ySouris < 150 + jeu.HAUTEUR_BOUTON)
             {
@@ -148,13 +151,16 @@ int main(int argc, char* argv[])
 				jeu.duo = true;
 				jeu.menu = false;
 				jeu.quit = false;
+                jeu.score = false;
+
             }
 			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 200 && jeu.ySouris < 200 + jeu.HAUTEUR_BOUTON)
             {
                 jeu.solo = false;
                 jeu.duo = false;
                 jeu.menu = false;
-                jeu.quit = true;
+                jeu.quit = false;
+                jeu.score = true;
             }
 			else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 250 && jeu.ySouris < 250 + jeu.HAUTEUR_BOUTON)
 			{
@@ -162,8 +168,36 @@ int main(int argc, char* argv[])
 				jeu.duo = false;
 				jeu.menu = false;
 				jeu.quit = true;
+                jeu.score = false;
 			}
 
+        }
+        else if(jeu.score)
+        {
+                Joueur pirates;
+                lireDonnes(pirates);
+
+                appliquerImage(0, 0, score, jeu.ecran);
+                appliquerClip(700, 25, bouton, jeu.ecran, &imageBouton[6]);
+                if (jeu.event.motion.x > 700 && jeu.event.motion.x < 700 + jeu.LARGEUR_BOUTON && jeu.event.motion.y > 25 && jeu.event.motion.y < 25 + jeu.HAUTEUR_BOUTON)
+                {
+                    appliquerClip(700, 25, bouton, jeu.ecran, &imageBouton[7]);
+                }
+
+                else if (jeu.xSouris > 700 && jeu.xSouris < 700 + jeu.LARGEUR_BOUTON && jeu.ySouris > 25 && jeu.ySouris < 25 + jeu.HAUTEUR_BOUTON)
+                {
+                    jeu.solo = false;
+                    jeu.duo = false;
+                    jeu.menu = true;
+                    jeu.quit = false;
+                    jeu.score = false;
+                }
+
+                for(int i=0; i<5; i++)
+                {
+                        afficherScoreFinal(pirates, jeu, 100, i*50 + 125, i , 1);
+                        afficherScoreFinal(pirates, jeu, 400, i*50 + 125, i , 2);
+                }
         }
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
         {
@@ -215,7 +249,7 @@ int main(int argc, char* argv[])
 			{
 				appliquerImage(820, 10, jeu.sonOff, jeu.ecran);
 			}
-			
+
 
 			if (!jeu.finTour)
 			{
@@ -280,7 +314,7 @@ int main(int argc, char* argv[])
 				jeu.xSouris = 0;
 				jeu.ySouris = 0;
 			}
-			
+
 			//affichage de l'ecran en blanc , supprime donc tout l'ecran
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 

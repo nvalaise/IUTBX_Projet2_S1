@@ -379,14 +379,26 @@ void cleanPirate(Joueur &pirate)
     SDL_FreeSurface(pirate.sprite);
 }
 
+
+void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int num)
+{
+    ostringstream score;
+    score.flush();
+    if (num==1)
+        score << pirate.tabScores[i][1];
+
+    if (num==1)
+        score << pirate.tabScores[i][2];
+    afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+
+}
+
+
 void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y)
 {
-
     ostringstream score;
-
     score.flush();
     score << pirate.score;
-
     afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
 }
 
@@ -482,8 +494,6 @@ void lireDonnes(Joueur &pirates)
     int donnes=0;
     int meilleurTour=0;
     int meilleurDiff=0;
-    int playerOne =0;
-    int playerTwo =0;
     int playerIA =0;
     int tmp=0;
 
@@ -520,17 +530,6 @@ void lireDonnes(Joueur &pirates)
         {
             meilleurDiff = pirates.tabScores[k][2] ;
         }
-/*
-        if(pirates.tabScores[k][0] == 1 )
-        {
-            playerOne++;
-        }
-
-        if(pirates.tabScores[k][0] == 2 )
-        {
-            playerTwo++;
-        }*/
-
         if(pirates.tabScores[k][0] == 3 )
         {
             playerIA++;
@@ -567,6 +566,8 @@ void lireDonnes(Joueur &pirates)
             }
         }
     }
+
+    /*
     cout << "----- BEST SCORES -----" << endl ;
     cout << "Classement des parties les plus courtes" << endl ;
     for(int i=0; i<5; i++)

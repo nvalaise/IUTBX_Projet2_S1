@@ -41,6 +41,7 @@ struct Gestion
 	bool menu = true;
 	bool solo = false;
 	bool duo = false;
+	bool score = false;
 	bool finTour = false;
 	bool sonBientotFin = true;
 	bool sonActive = true;
