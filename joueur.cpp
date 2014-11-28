@@ -384,22 +384,57 @@ void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int 
 {
     ostringstream score;
     score.flush();
-    if (num==1)
+    switch(num)
+    {
+    case 1 :
         score << pirate.tabScores[i][1];
+        break;
 
-    if (num==1)
+    case 2 :
         score << pirate.tabScores[i][2];
-    afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
+
+    case 3 :
+        score << pirate.nbVictoireIA;
+        break;
+
+    case 4 :
+        score << pirate.nbParties;
+        break;
+    }
+    afficheMot(score.str(), x, y, 20, jeu, "police.ttf");
+
 
 }
 
 
-void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y)
+void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y, int num)
 {
     ostringstream score;
     score.flush();
-    score << pirate.score;
-    afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+    switch(num)
+    {
+    case 1:
+        score << pirate.score;
+        afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
+
+    case 2:
+        score << pirate.last;
+        afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
+
+    case 3:
+        score << pirate.tour;
+        afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
+
+    case 4:
+        score << 500-pirate.score;
+        afficheMot(score.str(), x, y, 30, jeu, "police.ttf");
+        break;
+    }
+
 }
 
 void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate)
@@ -483,7 +518,6 @@ void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate)
         f << "3 " << deuxieme.tour << " " << 500-premier.score << " " ;
         break;
     }
-
     f.close();
 }
 
@@ -492,10 +526,14 @@ void lireDonnes(Joueur &pirates)
 {
     int parties=0;
     int donnes=0;
+
     int meilleurTour=0;
     int meilleurDiff=0;
-    int playerIA =0;
+
     int tmp=0;
+
+    int occurence ;
+    int y ;
 
     fstream f;
     f.open("scores.txt" , ios::in );
@@ -516,8 +554,11 @@ void lireDonnes(Joueur &pirates)
     }
 
     f.close();
+
     meilleurTour = pirates.tabScores[0][1];
     meilleurDiff = pirates.tabScores[0][2];
+
+    pirates.nbParties = parties ;
 
     for(int k=0; k<parties; k++)
     {
@@ -532,12 +573,39 @@ void lireDonnes(Joueur &pirates)
         }
         if(pirates.tabScores[k][0] == 3 )
         {
-            playerIA++;
+            pirates.nbVictoireIA++;
         }
     }
 
-
-
+    //on trie une première fois le tableau
+    for(int i=0; i<parties ; i++)
+    {
+        for(int j=i; j<parties; j++)
+        {
+            //trie du nombre de tour
+            if(pirates.tabScores[j][1]<pirates.tabScores[i][1])
+            {
+                tmp=pirates.tabScores[i][1];
+                pirates.tabScores[i][1]=pirates.tabScores[j][1];
+                pirates.tabScores[j][1]=tmp;
+            }
+        }
+    }
+    //on remplace les occurences par un nombre suffisament grand : 100
+    for (int z = 0; z < parties ; z++)
+    {
+        occurence = pirates.tabScores[z][1] ;
+        y = z+1 ;
+        while(pirates.tabScores[z][1]==pirates.tabScores[y][1])
+        {
+            if(pirates.tabScores[z][1]=pirates.tabScores[z][1])
+            {
+               pirates.tabScores[y][1] = 100;
+               y++;
+            }
+        }
+    }
+    //on retrie le tableau
     for(int i=0; i<parties ; i++)
     {
         for(int j=i; j<parties; j++)
@@ -552,52 +620,43 @@ void lireDonnes(Joueur &pirates)
         }
     }
 
-
-    for(int i=26; i!=0; i--)
+    for(int i=0; i<parties; i++)
     {
-        for(int j=0; j<i; j++)
+        for(int j=i+1; j<parties; j++)
         {
-            //trie de la différence
-            if(pirates.tabScores[j][2]<pirates.tabScores[i+1][2])
+            //trie du nombre de tour
+            if(pirates.tabScores[j][2]>pirates.tabScores[i][2])
             {
                 tmp=pirates.tabScores[j][2];
-                pirates.tabScores[j][2]=pirates.tabScores[j+1][2];
-                pirates.tabScores[j+1][2]=tmp;
+                pirates.tabScores[j][2]=pirates.tabScores[i][2];
+                pirates.tabScores[i][2]=tmp;
             }
         }
     }
-
-    /*
-    cout << "----- BEST SCORES -----" << endl ;
-    cout << "Classement des parties les plus courtes" << endl ;
-    for(int i=0; i<5; i++)
+    for (int z = 0; z < parties ; z++)
     {
-        if(i<9)
+        occurence = pirates.tabScores[z][2] ;
+        y = z+1 ;
+        while(pirates.tabScores[z][2]==pirates.tabScores[y][2])
         {
-            cout << i+1 << ".  " << pirates.tabScores[i][1] << endl ;
-        }
-        else
-        {
-            cout << i+1 << ". " << pirates.tabScores[i][1] << endl ;
+            if(pirates.tabScores[z][2]=pirates.tabScores[z][2])
+            {
+               pirates.tabScores[y][2] = -1;
+               y++;
+            }
         }
     }
-
-    cout << "Classement des plus grandes différences" << endl ;
-    for(int i=0; i<5; i++)
+    for(int i=0; i<parties; i++)
     {
-        if(i<9)
+        for(int j=i+1; j<parties; j++)
         {
-            cout << i+1 << ".  " << pirates.tabScores[i][2] << endl ;
-        }
-        else
-        {
-            cout << i+1 << ". " << pirates.tabScores[i][2] << endl ;
+            //trie du nombre de tour
+            if(pirates.tabScores[j][2]>pirates.tabScores[i][2])
+            {
+                tmp=pirates.tabScores[j][2];
+                pirates.tabScores[j][2]=pirates.tabScores[i][2];
+                pirates.tabScores[i][2]=tmp;
+            }
         }
     }
-    /*    cout << "Victoires en moins de tours : " << meilleurTour << endl ;
-        cout << "Victoires avec le plus gros écart : " << meilleurDiff << endl;
-        cout << "Nombre de victoires du joueur 1 : " << playerOne << endl ;
-        cout << "Nombre de victoires du joueur 2 : " << playerTwo << endl ;
-        cout << "Nombre de victoires de l'IA     : " << playerIA << endl << endl  ;*/
 }
-

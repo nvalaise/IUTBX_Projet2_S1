@@ -53,6 +53,9 @@ struct Joueur
 	bool bas = false;
 	bool gauche = false;
 	bool droite = false;
+
+	int nbVictoireIA = 0 ;
+	int nbParties = 0 ;
 };
 
 /***********************************
@@ -72,7 +75,7 @@ void cleanPirate(Joueur &pirate);
 
 void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int num);
 
-void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y);
+void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y, int num);
 
 void cleanImageGagnant(Joueur &pirate);
 

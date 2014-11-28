@@ -192,11 +192,17 @@ int main(int argc, char* argv[])
                     jeu.quit = false;
                     jeu.score = false;
                 }
-
+                afficheMot("Records", 300, 10, 30, jeu, "police.ttf");
+                afficheMot("Tours joue", 55, 75, 15, jeu, "police.ttf");
+                afficheMot("Difference score", 255, 75, 15, jeu, "police.ttf");
+                afficheMot("Victoire de l'IA :", 520, 125, 15, jeu, "police.ttf");
+                afficherScoreFinal(pirates, jeu, 700, 120, 0, 3 );
+                afficheMot("Nombre de parties :", 520, 185, 15, jeu, "police.ttf");
+                afficherScoreFinal(pirates, jeu, 743, 180, 0, 4 );
                 for(int i=0; i<5; i++)
                 {
                         afficherScoreFinal(pirates, jeu, 100, i*50 + 125, i , 1);
-                        afficherScoreFinal(pirates, jeu, 400, i*50 + 125, i , 2);
+                        afficherScoreFinal(pirates, jeu, 325, i*50 + 125, i , 2);
                 }
         }
 		else if (jeu.solo && victoire(premier, jeu, plateau, unePiece, 0) == -1 && victoire(deuxieme, jeu, plateau, unePiece, 1) == -1)
@@ -217,6 +223,7 @@ int main(int argc, char* argv[])
 				Mix_VolumeChunk(jeu.sonResteCinquante, 0);
 				Mix_VolumeChunk(jeu.sonPerdu, 0);
 			}
+
 			if (jeu.xSouris > 820 && jeu.xSouris < 870 && jeu.ySouris > 10 && jeu.ySouris < 60)
 			{
 				if (jeu.sonActive)
@@ -235,11 +242,16 @@ int main(int argc, char* argv[])
 
 			afficherPiecePlateau(plateau, jeu);
 			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-			afficherScore(premier, jeu, 550, 100);
+			afficherScore(premier, jeu, 550, 100, 1);
 			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-			afficherScore(deuxieme, jeu, 750, 100);
+			afficherScore(deuxieme, jeu, 750, 100, 1);
 			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
 			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+            afficheMot("Last", 537, 350, 15, jeu, "police.ttf");
+            afficheMot("Last", 737, 350, 15, jeu, "police.ttf");
+            afficherScore(premier, jeu, 550, 380, 2);
+            afficherScore(deuxieme, jeu, 750, 380 ,2);
+
 
 			if (jeu.sonActive)
 			{
@@ -320,11 +332,15 @@ int main(int argc, char* argv[])
 
 			afficherPiecePlateau(plateau, jeu);
 			afficherBonus(jeu, plateau, 500, 150, premier.nbBonus);
-			afficherScore(premier, jeu, 550, 100);
+			afficherScore(premier, jeu, 550, 100,1 );
 			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
-			afficherScore(deuxieme, jeu, 750, 100);
+			afficherScore(deuxieme, jeu, 750, 100, 1);
 			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
 			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+            afficheMot("Last", 537, 350, 15, jeu, "police.ttf");
+            afficheMot("Last", 737, 350, 15, jeu, "police.ttf");
+            afficherScore(premier, jeu, 550, 380, 2);
+            afficherScore(deuxieme, jeu, 750, 380 ,2);
 
 			if (jeu.sonActive)
 			{
@@ -371,6 +387,13 @@ int main(int argc, char* argv[])
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 			afficheGagnant(premier, jeu, 240, 13, 0);
+
+            afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
+            afficheMot("Tours", 750, 200, 15, jeu, "police.ttf");
+            afficherScore(premier, jeu, 775, 225, 3);
+            afficherScore(deuxieme, jeu, 775, 225, 4);
+
+
             sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
 			Mix_PlayChannel(1, jeu.sonNiveauTermine, 0);
@@ -391,6 +414,15 @@ int main(int argc, char* argv[])
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
 			afficheGagnant(deuxieme, jeu, 240, 13, 1);
+
+
+            afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
+            afficheMot("Tours", 750, 200, 15, jeu, "police.ttf");
+            afficherScore(deuxieme, jeu, 775, 225, 3);
+            afficherScore(premier, jeu, 100, 225, 5);
+
+
+
             sauvegarder(premier, deuxieme, numeroPirate);
 			SDL_Flip(jeu.ecran);
 			if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
