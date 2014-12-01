@@ -451,6 +451,9 @@ void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate
     case 1:
         appliquerImage(x, y, pirate.imageGagnantRouge, jeu.ecran);
         break;
+	case 2:
+		appliquerImage(x, y, pirate.imagePerdant, jeu.ecran);
+		break;
     }
     lireDonnes(pirate);
 }

@@ -40,6 +40,7 @@ struct Joueur
 
 	SDL_Surface* imageGagnantVert = chargerImage("gagne1.png");
 	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.png");
+	SDL_Surface* imagePerdant = chargerImage("perdu.png");
 
 	int x, y;
 	int score = 0;

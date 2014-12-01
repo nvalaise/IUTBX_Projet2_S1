@@ -413,7 +413,16 @@ int main(int argc, char* argv[])
 		else if (victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 1 || victoire(deuxieme, jeu, plateau, unePiece, numeroPirate) == 2)
 		{
 			SDL_FillRect(jeu.ecran, NULL, SDL_MapRGB(jeu.ecran->format, 0, 0, 0));
-			afficheGagnant(deuxieme, jeu, 240, 13, 1);
+			if (numeroPirate == 1)
+			{
+				afficheGagnant(deuxieme, jeu, 240, 13, 1);
+
+			}
+			else if (numeroPirate == 2)
+			{
+				afficheGagnant(deuxieme, jeu, 240, 13, 2);
+
+			}
 
 
             afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
