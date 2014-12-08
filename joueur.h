@@ -30,13 +30,13 @@ Declaration des structures
 ************************************/
 struct Joueur
 {
-	const int LARGEUR_IMAGE = 61;
-	const int HAUTEUR_IMAGE = 61;
+	const int LARGEUR_IMAGE = 40;
+	const int HAUTEUR_IMAGE = 60;
 
-    int tabScores[300][300];
+    int tabScores[100][100];
 
-	SDL_Surface* sprite = chargerImage("pirates.png");
-	SDL_Rect image[2];
+	SDL_Surface* sprite = chargerImage("sprite.png");
+	SDL_Rect image[32];
 
 	SDL_Surface* imageGagnantVert = chargerImage("gagne1.png");
 	SDL_Surface* imageGagnantRouge = chargerImage("gagne2.png");
@@ -64,7 +64,7 @@ Declaration des prototype
 ************************************/
 void initPirate(Joueur &premier, Joueur &deuxieme);
 
-void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate);
+void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate, int numeroSprite);
 
 void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau, Gestion &jeu, Piece &unePiece);
 

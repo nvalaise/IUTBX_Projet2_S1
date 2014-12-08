@@ -25,45 +25,13 @@ int main(int argc, char* argv[])
     SDL_Surface* bouton = chargerImageCleCouleur("bouton.png", 0, 255, 255);
     SDL_Rect imageBouton[8];
 
-    imageBouton[0].x = 0;
-    imageBouton[0].y = 0;
-    imageBouton[0].h = jeu.HAUTEUR_BOUTON;
-    imageBouton[0].w = jeu.LARGEUR_BOUTON;
-
-    imageBouton[1].x = jeu.LARGEUR_BOUTON;
-    imageBouton[1].y = 0;
-    imageBouton[1].h = jeu.HAUTEUR_BOUTON;
-    imageBouton[1].w = jeu.LARGEUR_BOUTON;
-
-    imageBouton[2].x = jeu.LARGEUR_BOUTON * 2;
-    imageBouton[2].y = 0;
-    imageBouton[2].h = jeu.HAUTEUR_BOUTON;
-    imageBouton[2].w = jeu.LARGEUR_BOUTON;
-
-	imageBouton[3].x = jeu.LARGEUR_BOUTON * 3;
-	imageBouton[3].y = 0;
-	imageBouton[3].h = jeu.HAUTEUR_BOUTON;
-	imageBouton[3].w = jeu.LARGEUR_BOUTON;
-
-	imageBouton[4].x = jeu.LARGEUR_BOUTON * 4;
-	imageBouton[4].y = 0;
-	imageBouton[4].h = jeu.HAUTEUR_BOUTON;
-	imageBouton[4].w = jeu.LARGEUR_BOUTON;
-
-	imageBouton[5].x = jeu.LARGEUR_BOUTON * 5;
-	imageBouton[5].y = 0;
-	imageBouton[5].h = jeu.HAUTEUR_BOUTON;
-	imageBouton[5].w = jeu.LARGEUR_BOUTON;
-
-	imageBouton[6].x = jeu.LARGEUR_BOUTON * 6;
-	imageBouton[6].y = 0;
-	imageBouton[6].h = jeu.HAUTEUR_BOUTON;
-	imageBouton[6].w = jeu.LARGEUR_BOUTON;
-
-	imageBouton[7].x = jeu.LARGEUR_BOUTON * 7;
-	imageBouton[7].y = 0;
-	imageBouton[7].h = jeu.HAUTEUR_BOUTON;
-	imageBouton[7].w = jeu.LARGEUR_BOUTON;
+	for (int i = 0; i < 8; i++)
+	{
+		imageBouton[i].x = jeu.LARGEUR_BOUTON * i;
+		imageBouton[i].y = 0;
+		imageBouton[i].h = jeu.HAUTEUR_BOUTON;
+		imageBouton[i].w = jeu.LARGEUR_BOUTON;
+	}
 
 	jeu.sonOn = chargerImage("haut_parleur_on.png");
 	jeu.sonOff = chargerImage("haut_parleur_off.png");
@@ -245,8 +213,8 @@ int main(int argc, char* argv[])
 			afficherScore(premier, jeu, 550, 100, 1);
 			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
 			afficherScore(deuxieme, jeu, 750, 100, 1);
-			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
-			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[1]);
+			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[5]);
             afficheMot("Last", 537, 350, 15, jeu, "police.ttf");
             afficheMot("Last", 737, 350, 15, jeu, "police.ttf");
             afficherScore(premier, jeu, 550, 380, 2);
@@ -267,7 +235,7 @@ int main(int argc, char* argv[])
 			{
 				if (numeroPirate == 0)
 				{
-					afficherPirate(premier, jeu, numeroPirate);
+					afficherPirate(premier, jeu, numeroPirate, 1);
 					deplacerPirate(premier, numeroPirate, plateau, jeu, unePiece);
 					deuxieme.x = jeu.xSouris / 61 * 61;
 					deuxieme.y = jeu.ySouris / 61 * 61;
@@ -275,7 +243,7 @@ int main(int argc, char* argv[])
 
 				else if (numeroPirate == 2)
 				{
-					afficherPirate(deuxieme, jeu, numeroPirate);
+					afficherPirate(deuxieme, jeu, numeroPirate, 5);
 					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
 					premier.x = deuxieme.x;
 					premier.y = deuxieme.y;
@@ -335,8 +303,8 @@ int main(int argc, char* argv[])
 			afficherScore(premier, jeu, 550, 100,1 );
 			afficherBonus(jeu, plateau, 700, 150, deuxieme.nbBonus);
 			afficherScore(deuxieme, jeu, 750, 100, 1);
-			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[0]);
-			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[1]);
+			appliquerClip(535, 30, premier.sprite, jeu.ecran, &premier.image[1]);
+			appliquerClip(735, 30, deuxieme.sprite, jeu.ecran, &deuxieme.image[5]);
             afficheMot("Last", 537, 350, 15, jeu, "police.ttf");
             afficheMot("Last", 737, 350, 15, jeu, "police.ttf");
             afficherScore(premier, jeu, 550, 380, 2);
@@ -355,7 +323,7 @@ int main(int argc, char* argv[])
 			{
 				if (numeroPirate == 0)
 				{
-					afficherPirate(premier, jeu, numeroPirate);
+					afficherPirate(premier, jeu, numeroPirate, 1);
 					deplacerPirate(premier, numeroPirate, plateau, jeu, unePiece);
 					deuxieme.x = jeu.xSouris / 61 * 61;
 					deuxieme.y = jeu.ySouris / 61 * 61;
@@ -363,7 +331,7 @@ int main(int argc, char* argv[])
 
 				else if (numeroPirate == 1)
 				{
-					afficherPirate(deuxieme, jeu, numeroPirate);
+					afficherPirate(deuxieme, jeu, numeroPirate, 1);
 					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
 					premier.x = jeu.xSouris / 61 * 61;
 					premier.y = jeu.ySouris / 61 * 61;
@@ -423,7 +391,6 @@ int main(int argc, char* argv[])
 				afficheGagnant(deuxieme, jeu, 240, 13, 2);
 
 			}
-
 
             afficheMot("Difference", 50, 200, 15, jeu, "police.ttf");
             afficheMot("Tours", 750, 200, 15, jeu, "police.ttf");
