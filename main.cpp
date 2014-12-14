@@ -391,7 +391,7 @@ int main(int argc, char* argv[])
 
 				else if (numeroPirate == 1)
 				{
-					afficherPirate(deuxieme, jeu, numeroPirate, 1);
+					afficherPirate(deuxieme, jeu, numeroPirate, 5);
 					deplacerPirate(deuxieme, numeroPirate, plateau, jeu, unePiece);
 					premier.x = jeu.xSouris / 61 * 61;
 					premier.y = jeu.ySouris / 61 * 61;

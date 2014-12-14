@@ -132,91 +132,181 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
                 && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0 && ((numeroPirate==0) || (numeroPirate==1)))
         {
             direction(pirate, jeu);
+			if (numeroPirate == 0)
+			{
+				if (pirate.bas)
+				{
+					int a = 0;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.y < ySourisMatrice * 61)
+					{
+						if (a == 4)
+						{
+							a = 0;
+						}
+						pirate.y += VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.haut)
+				{
+					int a = 16;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.y > ySourisMatrice * 61)
+					{
+						if (a == 20)
+						{
+							a = 16;
+						}
+						pirate.y -= VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.droite)
+				{
+					int a = 8;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.x < xSourisMatrice * 61)
+					{
+						if (a == 12)
+						{
+							a = 8;
+						}
+						pirate.x += VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.gauche)
+				{
+					int a = 24;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.x > xSourisMatrice * 61)
+					{
+						if (a == 28)
+						{
+							a = 24;
+						}
+						pirate.x -= VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+			}
+			else{
+				if (pirate.bas)
+				{
+					int a = 4;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.y < ySourisMatrice * 61)
+					{
+						if (a == 8)
+						{
+							a = 4;
+						}
+						pirate.y += VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.haut)
+				{
+					int a = 20;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.y > ySourisMatrice * 61)
+					{
+						if (a == 24)
+						{
+							a = 20;
+						}
+						pirate.y -= VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.droite)
+				{
+					int a = 12;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.x < xSourisMatrice * 61)
+					{
+						if (a == 16)
+						{
+							a = 12;
+						}
+						pirate.x += VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+				else if (pirate.gauche)
+				{
+					int a = 28;
+					score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
+					while (pirate.x > xSourisMatrice * 61)
+					{
+						if (a == 32)
+						{
+							a = 28;
+						}
+						pirate.x -= VITESSE;
+						afficherPiecePlateau(plateau, jeu);
+						afficherPirate(pirate, jeu, numeroPirate, a);
+						SDL_Delay(delay);
+						SDL_Flip(jeu.ecran);
+						jeu.finTour = false;
+						a++;
+					}
+					plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
+					jeu.finTour = true;
+				}
+			}
 			//bouge le perso en fonction des direction
-            if (pirate.bas)
-            {
-				int a = 0;
-                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
-                while (pirate.y < ySourisMatrice * 61)
-                {
-					if (a == 4)
-					{
-						a = 0;
-					}
-                    pirate.y += VITESSE;
-                    afficherPiecePlateau(plateau, jeu);
-                    afficherPirate(pirate, jeu, numeroPirate, a);
-					SDL_Delay(delay);
-                    SDL_Flip(jeu.ecran);
-                    jeu.finTour = false;
-					a++;
-                }
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
-                jeu.finTour = true;
-            }
-            else if (pirate.haut)
-            {
-				int a = 16;
-                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
-                while (pirate.y > ySourisMatrice * 61)
-                {
-					if (a == 20)
-					{
-						a = 16;
-					}
-                    pirate.y -= VITESSE;
-                    afficherPiecePlateau(plateau, jeu);
-                    afficherPirate(pirate, jeu, numeroPirate, a);
-					SDL_Delay(delay);
-                    SDL_Flip(jeu.ecran);
-                    jeu.finTour = false;
-					a++;
-                }
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
-                jeu.finTour = true;
-            }
-            else if (pirate.droite)
-            {
-				int a = 8;
-                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
-                while (pirate.x < xSourisMatrice * 61)
-                {
-					if (a == 12)
-					{
-						a = 8;
-					}
-                    pirate.x += VITESSE;
-                    afficherPiecePlateau(plateau, jeu);
-                    afficherPirate(pirate, jeu, numeroPirate, a);
-					SDL_Delay(delay);
-                    SDL_Flip(jeu.ecran);
-                    jeu.finTour = false;
-					a++;
-                }
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
-                jeu.finTour = true;
-            }
-            else if (pirate.gauche)
-            {
-				int a = 24;
-                score(pirate, xSourisMatrice, ySourisMatrice, jeu, plateau, unePiece);
-                while (pirate.x > xSourisMatrice * 61)
-                {
-					if (a == 28)
-					{
-						a = 24;
-					}
-                    pirate.x -= VITESSE;
-                    afficherPiecePlateau(plateau, jeu);
-                    afficherPirate(pirate, jeu, numeroPirate, a);
-					SDL_Delay(delay);
-                    SDL_Flip(jeu.ecran);
-                    jeu.finTour = false;
-					a++;
-                }
-                plateau.matrice[ySourisMatrice][xSourisMatrice].valeur = 0;
-                jeu.finTour = true;
-            }
+            
         }
     }
 	//on est sur l'ia
