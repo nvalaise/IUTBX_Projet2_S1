@@ -2,11 +2,6 @@
 
 using namespace std;
 
-/******FONCTION D'INITIALISATION DU PIRATE******
-  Prend en entrée
-  -les deux joueurs
-***********************************************/
-
 void initPirate(Joueur &premier, Joueur &deuxieme)
 {
     //initialisation des coordonnées du premier joueur
@@ -24,6 +19,7 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
     deuxieme.nbBonus = 0;
     deuxieme.last = 0;
 
+	//chargement des morceau de personnage pour le faire marcher
 	int j = 0;
 	for (int i = 0; i < 4; i++)
 	{
@@ -92,12 +88,6 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
 
 }
 
-/******FONCTION D'AFFICHAGE DU PIRATE******
-  Prend en entrée
-  - les deux joueurs,
-  - la gestion pour la gestion des event souris
-  - le numéro du joueur à gérer
-***********************************************/
 void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate, int numeroSprite)
 {
     if (numeroPirate == 0)
@@ -115,14 +105,6 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate, int numeroSp
     }
 }
 
-/******FONCTION DE DEPLACEMENT DU PIRATE******
-  Prend en entrée
-  - les deux joueurs,
-  - le plateau pour le modifier une fois la pièce
-  selectionnée
-  - la gestion pour la gestion des events souris
-  - le numéro du joueur pour alterner
-***********************************************/
 void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion &jeu, Piece &unePiece)
 {
     int xSourisMatrice = jeu.xSouris / 61;
@@ -136,16 +118,17 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 
 	int delay = 60;
 
-    //cout << "je commence ici : " << endl << xDepart << ":" << yDepart << endl ;
-
     const int VITESSE = 6;
+
+	//si on est pas sur l'IA
     if((numeroPirate==0) || (numeroPirate==1))
     {
+		//le clic est sur la plateau
         if (jeu.xSouris >= 0 && jeu.xSouris <= 427 && jeu.ySouris >= 0 && jeu.ySouris <= 427
                 && plateau.matrice[ySourisMatrice][xSourisMatrice].valeur != 0 && ((numeroPirate==0) || (numeroPirate==1)))
         {
-            //cout << "test de la direction" << endl ;
             direction(pirate, jeu);
+			//bouge le perso en fonction des direction
             if (pirate.bas)
             {
 				int a = 0;
@@ -232,6 +215,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
             }
         }
     }
+	//on est sur l'ia
     else if(numeroPirate==2)
 	{
 		
@@ -448,18 +432,22 @@ void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &
         pirate.bonus = 10;
     }
 
+	//joue le son
     pirate.last = plateau.matrice[y][x].valeur;
 	if (pirate.last == 10 || pirate.last == 20 || pirate.last == 30 || pirate.last == 50)
 	{
+		///normal
 		Mix_PlayChannel(1, jeu.sonPiece, 0);
 	}
 	else if (pirate.last == 100)
 	{
+		//piece de 100
 		Mix_PlayChannel(1, jeu.sonPieceCent, 0);
 	}
 
 	if (pirate.score >= 450 && jeu.sonBientotFin)
 	{
+		// reste 50
 		Mix_PlayChannel(1, jeu.sonResteCinquante, 0);
 		jeu.sonBientotFin = false;
 	}
@@ -492,7 +480,6 @@ void cleanPirate(Joueur &pirate)
     SDL_FreeSurface(pirate.sprite);
 }
 
-
 void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int num)
 {
     ostringstream score;
@@ -519,7 +506,6 @@ void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int 
 
 
 }
-
 
 void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y, int num)
 {
@@ -584,6 +570,7 @@ void direction(Joueur &pirate, Gestion &jeu)
     pirate.gauche = false;
     pirate.droite = false;
 
+	//bas
     if (pirate.y / 61 < jeu.ySouris / 61 && pirate.x / 61 == jeu.xSouris / 61)
     {
         pirate.bas = true;
@@ -591,6 +578,7 @@ void direction(Joueur &pirate, Gestion &jeu)
         pirate.gauche = false;
         pirate.droite = false;
     }
+	//haut
     else if (pirate.y / 61 > jeu.ySouris / 61 && pirate.x / 61 == jeu.xSouris / 61)
     {
         pirate.bas = false;
@@ -598,6 +586,7 @@ void direction(Joueur &pirate, Gestion &jeu)
         pirate.gauche = false;
         pirate.droite = false;
     }
+	//droite
     else if (pirate.x / 61 < jeu.xSouris / 61 && pirate.y / 61 == jeu.ySouris / 61)
     {
         pirate.bas = false;
@@ -605,6 +594,7 @@ void direction(Joueur &pirate, Gestion &jeu)
         pirate.droite = true;
         pirate.gauche = false;
     }
+	//gauche
     else if (pirate.x / 61 > jeu.xSouris / 61 && pirate.y / 61 == jeu.ySouris / 61)
     {
         pirate.bas = false;
@@ -640,7 +630,6 @@ void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate)
     }
     f.close();
 }
-
 
 void lireDonnes(Joueur &pirates)
 {
