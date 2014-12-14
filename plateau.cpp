@@ -10,10 +10,12 @@ void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 	int nbPieceDix = 0, nbPieceVingt = 0, nbPieceTrente = 0, nbPieceCinquante = 0, nbPieceCent = 0;
 	srand(time(NULL));
 
+    //on place les pièces par ordre croissante suivant les règles du jeu
 	for (int i = 0; i < NB_BLOCK_HAUTEUR; i++)
 	{
 		for (int j = 0; j < NB_BLOCK_LARGEUR; j++)
 		{
+		    //la case du milieu doit être vide
 			if (i != 3 || j != 3)
 			{
 				if (nbPieceDix < 14)
@@ -46,8 +48,10 @@ void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 			{
 				plateau.matrice[i][j].valeur = 0;
 			}
+			//on donne les coordonnées réelles sur la grille
 			plateau.matrice[i][j].x = x;
 			plateau.matrice[i][j].y = y;
+			//on donne la position de la pièce sur la matrice
 			plateau.matrice[i][j].xMatrice = j;
 			plateau.matrice[i][j].yMatrice = i;
 			x += unePiece.LARGEUR_IMAGE;
@@ -56,8 +60,10 @@ void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 		x = 0;
 	}
 
+    //on va mélanger la grille
 	for (int i = 0; i < 50; i++)
 	{
+	    //génération de valeurs aléatoires
 		int x1 = rand() % 7;
 		int y1 = rand() % 7;
 		int x2 = rand() % 7;
@@ -95,6 +101,7 @@ void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 				y1 = rand() % 7;
 			}
 		}
+
 		// on interverti les pieces
 		tmp1 = plateau.matrice[y1][x1].valeur;
 		plateau.matrice[y1][x1].valeur = plateau.matrice[y2][x2].valeur;
@@ -112,16 +119,20 @@ void placementPiecesTableau(Plateau &plateau, Piece &unePiece)
 
 void afficherPiecePlateau(Plateau &plateau, Gestion &jeu)
 {
+    //affichage des pièces sur l'écran
 	for (int i = 0; i < NB_BLOCK_HAUTEUR; i++)
 	{
 		for (int j = 0; j < NB_BLOCK_LARGEUR; j++)
 		{
 			if (plateau.matrice[i][j].valeur == 0)
 			{
+			    //on sélectionne l'image à afficher (car elle est divisé en plusieurs clips)
 				plateau.matrice[i][j].image[0].x = 0;
 				plateau.matrice[i][j].image[0].y = 0;
+				//hauteur et largeur de l'image
 				plateau.matrice[i][j].image[0].h = plateau.matrice[i][j].HAUTEUR_IMAGE;
 				plateau.matrice[i][j].image[0].w = plateau.matrice[i][j].LARGEUR_IMAGE;
+				//affiche l'image sur la grille
 				appliquerClip(plateau.matrice[i][j].x, plateau.matrice[i][j].y, plateau.matrice[i][j].sprite, jeu.ecran, &plateau.matrice[i][j].image[0]);
 			}
 			else if (plateau.matrice[i][j].valeur == 10)
@@ -170,6 +181,7 @@ void afficherPiecePlateau(Plateau &plateau, Gestion &jeu)
 
 void afficherBonus(Gestion &jeu, Plateau &plateau, int x, int y, int nbBonus)
 {
+    //suivant le niveau du bonus, on affiche une image différente
 	if (nbBonus == 0)
 	{
 		appliquerImage(x, y, plateau.bonus1, jeu.ecran);
@@ -194,6 +206,7 @@ void afficherBonus(Gestion &jeu, Plateau &plateau, int x, int y, int nbBonus)
 
 void cleanBonus(Plateau &plateau)
 {
+    //on libère les surfaces
 	SDL_FreeSurface(plateau.bonus1);
 	SDL_FreeSurface(plateau.bonus2);
 	SDL_FreeSurface(plateau.bonus3);

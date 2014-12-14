@@ -7,11 +7,13 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
     //initialisation des coordonnées du premier joueur
     premier.x = 3 * 61;
     premier.y = 3 * 61;
+    //initialisation des scores
     premier.score = 0;
     premier.bonus = 0;
     premier.nbBonus = 0;
     premier.last = 0;
 
+    //idem pour le deuxième joueur
 	deuxieme.x = 3 * 61;
 	deuxieme.y = 3 * 61;
     deuxieme.score = 0;
@@ -90,6 +92,8 @@ void initPirate(Joueur &premier, Joueur &deuxieme)
 
 void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate, int numeroSprite)
 {
+    //on affiche une image différente pour chaque joueur en fonction de leur numérp
+    //les coordonnées sont passé en paramètre grâce à la fonction deplacerPirate
     if (numeroPirate == 0)
     {
 		appliquerClip(pirate.x + 11, pirate.y + 1, pirate.sprite, jeu.ecran, &pirate.image[numeroSprite]);
@@ -218,7 +222,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
 	//on est sur l'ia
     else if(numeroPirate==2)
 	{
-		
+
         //les coordonnées de la matrice en entrée
         //initialisation des options
                //les coordonnées de la matrice en entrée
@@ -399,7 +403,7 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau ,Gestion
             }
         }
 	}
-	
+
 }
 
 void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &unePiece)

@@ -18,7 +18,7 @@ Declaration des includes
 
 /***********************************
 Declaration des constantes
-************************************/ 
+************************************/
 
 /***********************************
 Declaration des structures
@@ -37,6 +37,20 @@ struct Piece
 /***********************************
 Declaration des prototype
 ************************************/
+
+/*
+****************nom de la fonction******************
+* cleanPiece *
+****************auteur, dates***********************
+* maxime *
+****************description*************************
+* elle libère la surface de l'image*
+****************entrées*****************************
+* la structure de la pièce *
+****************sorties*****************************
+* elle renvoie rien *
+****************************************************
+*/
 void cleanPiece(Piece &unePiece);
 
 #endif

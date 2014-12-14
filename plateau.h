@@ -41,9 +41,72 @@ struct Plateau
 /***********************************
 Declaration des prototype
 ************************************/
+
+/*
+****************nom de la fonction******************
+* placementPiecesTableau *
+****************auteur, dates***********************
+* maxime *
+****************description*************************
+* elle place les pièces de façon non aléatoire
+* c'est à dire qu'on les dispose sur la grille par
+* ordre croissant, en respectant le nombre de chaque
+* pièce.
+* ensuite elle les mélangent *
+****************entrées*****************************
+* la structure de la pièce et du plateau *
+****************sorties*****************************
+* elle renvoie rien *
+****************************************************
+*/
 void placementPiecesTableau(Plateau &plateau, Piece &unePiece);
+
+/*
+****************nom de la fonction******************
+* afficherPiecePlateau *
+****************auteur, dates***********************
+* maxime *
+****************description*************************
+* elle affiche les pièces en fonction des valeurs
+* attribuées précédemment *
+****************entrées*****************************
+* la structure de la pièce et du plateau *
+****************sorties*****************************
+* elle renvoie rien *
+****************************************************
+*/
 void afficherPiecePlateau(Plateau &plateau, Gestion &jeu);
+
+/*
+****************nom de la fonction******************
+* cleanBonus*
+****************auteur, dates***********************
+* maxime *
+****************description*************************
+* en fonction de l'atat des bonus
+* on va afficher une image différente *
+****************entrées*****************************
+* la structure de la gestion et du plateau
+* les coordonnées et le niveau du bonus
+****************sorties*****************************
+* elle renvoie rien *
+****************************************************
+*/
 void afficherBonus(Gestion &jeu, Plateau &plateau, int x, int y, int nbBonus);
+
+/*
+****************nom de la fonction******************
+* cleanBonus *
+****************auteur, dates***********************
+* maxime *
+****************description*************************
+* elle libère la surface de l'image*
+****************entrées*****************************
+* la structure du plateau *
+****************sorties*****************************
+* elle renvoie rien *
+****************************************************
+*/
 void cleanBonus(Plateau &plateau);
 
 #endif
