@@ -10,9 +10,9 @@ Declaration des includes
 #include <time.h>
 
 //declaration de la SDL
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
 
 //fichier interne
 #include "piece.h"

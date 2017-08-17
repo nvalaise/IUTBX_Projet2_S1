@@ -12,10 +12,10 @@ Declaration des includes
 
 
 //declaration de la SDL
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
 
 //fichier internes
 #include "plateau.h"
@@ -71,7 +71,7 @@ Declaration des prototype
 ****************description*************************
 * elle initialise la position des pirates et leurs
 * images *
-****************entrées*****************************
+****************entrï¿½es*****************************
 * les 2 joueurs *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -85,11 +85,11 @@ void initPirate(Joueur &premier, Joueur &deuxieme);
 ****************auteur, dates***********************
 * maxime *
 ****************description*************************
-* affiche le pirate sélectionné et prend un sprite 
+* affiche le pirate sï¿½lectionnï¿½ et prend un sprite
  pour qu'il puisse marcher *
-****************entrées*****************************
-* un joueur, son numéro, le plateau avec les pieces
-la gestion du jeu avec les variables utiles, et 
+****************entrï¿½es*****************************
+* un joueur, son numï¿½ro, le plateau avec les pieces
+la gestion du jeu avec les variables utiles, et
 l'image du sprite qu'on veut*
 ****************sorties*****************************
 * elle renvoie rien *
@@ -106,10 +106,10 @@ void afficherPirate(Joueur &pirate, Gestion &jeu, int numeroPirate, int numeroSp
  pour l'IA*
 ****************description*************************
 * fait marcher les personnages en l'IA en fonction
-de la case sélectionnée *
-****************entrées*****************************
-* un joueur, son numéron, le plateau avec les pieces
-la gestion du jeu pour les variables(event ...), 
+de la case sï¿½lectionnï¿½e *
+****************entrï¿½es*****************************
+* un joueur, son numï¿½ron, le plateau avec les pieces
+la gestion du jeu pour les variables(event ...),
 et la structure d'une piece *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -125,9 +125,9 @@ void deplacerPirate(Joueur &pirate, int &numeroPirate, Plateau &plateau, Gestion
 maxime pour le bruitage des pieces *
 ****************description*************************
 * augmente le score du pirate qui attrape la piece
-et gère les bonus. Quand on attrape une piece, 
-ca joue un son (différent selon les pieces)*
-****************entrées*****************************
+et gï¿½re les bonus. Quand on attrape une piece,
+ca joue un son (diffï¿½rent selon les pieces)*
+****************entrï¿½es*****************************
 * un joueur, sa position dans la matrice, la gestion
 du jeu pour les variables, le plateau avec les
 pieces, et la structure d'une piece*
@@ -143,18 +143,18 @@ void score(Joueur &pirate, int x, int y, Gestion &jeu, Plateau &plateau, Piece &
 ****************auteur, dates***********************
 * maxime *
 ****************description*************************
-* regarde si on a dépassé le score max (500) ou si
+* regarde si on a dï¿½passï¿½ le score max (500) ou si
 on peut encore bouger (si il y a moins de 14 trou
 sur la ligne et la colone du pirate)*
-****************entrées*****************************
-* un pirate, la gestion du jeu pour connaitre les 
+****************entrï¿½es*****************************
+* un pirate, la gestion du jeu pour connaitre les
 variables, le plateau de pieces, la structure d'une
-piece, et le numéro du pirate*
+piece, et le numï¿½ro du pirate*
 ****************sorties*****************************
-* elle renvoie le numéro du pirate qui a gagné si
+* elle renvoie le numï¿½ro du pirate qui a gagnï¿½ si
 le score est > 500 ou le pirate qui a perdu si le
-nombre de zéro > 14. Sinon ça renvoie -1 pour 
-dire que personne n'a encore perdu ou gagné*
+nombre de zï¿½ro > 14. Sinon ï¿½a renvoie -1 pour
+dire que personne n'a encore perdu ou gagnï¿½*
 ****************************************************
 */
 int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, int numeroPirate);
@@ -165,9 +165,9 @@ int victoire(Joueur &pirate, Gestion &jeu, Plateau &plateau, Piece &unePiece, in
 ****************auteur, dates***********************
 * maxime *
 ****************description*************************
-* supprime le sprite qu'on a chargé au début qui
+* supprime le sprite qu'on a chargï¿½ au dï¿½but qui
 contient les images des personnages*
-****************entrées*****************************
+****************entrï¿½es*****************************
 * la structure d'un pirate *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -182,8 +182,8 @@ void cleanPirate(Joueur &pirate);
 * nicolas *
 ****************description*************************
 * affiche le score dans le menu score *
-****************entrées*****************************
-* un joueur, la gestion du jeu pour les variables, 
+****************entrï¿½es*****************************
+* un joueur, la gestion du jeu pour les variables,
 la position en x et en y pour l'afficher, la colonne
 du tableau qui contient les scores et le numrero du
 pirate *
@@ -200,8 +200,8 @@ void afficherScoreFinal(Joueur &pirate, Gestion &jeu, int x, int y, int i , int 
 * nicolas *
 ****************description*************************
 * affiche les scores en cours de partie *
-****************entrées*****************************
-* un joueur, la gestion du jeu, une position x et y 
+****************entrï¿½es*****************************
+* un joueur, la gestion du jeu, une position x et y
 pour l'affichage et le numero du pirate*
 ****************sorties*****************************
 * elle renvoie rien *
@@ -216,7 +216,7 @@ void afficherScore(Joueur &pirate, Gestion &jeu, int x, int y, int num);
 * maxime *
 ****************description*************************
 * efface les images des gagnant*
-****************entrées*****************************
+****************entrï¿½es*****************************
 * un joueur *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -231,9 +231,9 @@ void cleanImageGagnant(Joueur &pirate);
 * maxime *
 ****************description*************************
 * affiche l'image correspondant au gagnant *
-****************entrées*****************************
-* un joueur, la gestion du jeu pour les variables, 
-une positio x et y pour l'affichage et le numero du 
+****************entrï¿½es*****************************
+* un joueur, la gestion du jeu pour les variables,
+une positio x et y pour l'affichage et le numero du
 pirate*
 ****************sorties*****************************
 * elle renvoie rien *
@@ -249,7 +249,7 @@ void afficheGagnant(Joueur &pirate, Gestion &jeu, int x, int y, int numeroPirate
 ****************description*************************
 * choisit la direction du pirate en fonction du clic
 du joueur *
-****************entrées*****************************
+****************entrï¿½es*****************************
 * les 2 joueurs *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -263,9 +263,9 @@ void direction(Joueur &pirate, Gestion &jeu);
 ****************auteur, dates***********************
 * nicolas *
 ****************description*************************
-* sauvegarde les données nécessaire pour le menu 
+* sauvegarde les donnï¿½es nï¿½cessaire pour le menu
 score *
-****************entrées*****************************
+****************entrï¿½es*****************************
 * les 2 joueurs et le numero du pirate *
 ****************sorties*****************************
 * elle renvoie rien *
@@ -279,8 +279,8 @@ void sauvegarder(Joueur &premier, Joueur &deuxieme,  int numeroPirate);
 ****************auteur, dates***********************
 * nicolas *
 ****************description*************************
-* lis les données qu'on a sauvegarder*
-****************entrées*****************************
+* lis les donnï¿½es qu'on a sauvegarder*
+****************entrï¿½es*****************************
 * un joueur *
 ****************sorties*****************************
 * elle renvoie rien *

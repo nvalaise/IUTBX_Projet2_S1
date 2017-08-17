@@ -9,10 +9,10 @@ Declaration des includes
 #include <string>
 
 //declaration de la SDL
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_mixer.h>
 
 /***********************************
 Declaration des constantes
@@ -63,25 +63,25 @@ Declaration des prototype
 * maxime *
 ****************description*************************
 * permet de charger une image *
-****************entrées*****************************
+****************entrï¿½es*****************************
 * le nom du fichier *
 ****************sorties*****************************
-* un sdl_surface en fonction de l'image demandé *
+* un sdl_surface en fonction de l'image demandï¿½ *
 ****************************************************
 */
 SDL_Surface* chargerImage(std::string nomFichier);
 
 /*
 ****************nom de la fonction******************
-* charger image clé couleur*
+* charger image clï¿½ couleur*
 ****************auteur, dates***********************
 * maxime *
 ****************description*************************
 * charge une image avec un couleur en transparence*
-****************entrées*****************************
+****************entrï¿½es*****************************
 * le nom du fichier *
 ****************sorties*****************************
-* un sdl_surface en fonction de l'image demandé *
+* un sdl_surface en fonction de l'image demandï¿½ *
 ****************************************************
 */
 SDL_Surface* chargerImageCleCouleur(std::string nomFichier, int rouge, int vert, int bleu);
@@ -93,7 +93,7 @@ SDL_Surface* chargerImageCleCouleur(std::string nomFichier, int rouge, int vert,
 * maxime *
 ****************description*************************
 * applique l'image sur l'ecran, (affichage de l'image)*
-****************entrées*****************************
+****************entrï¿½es*****************************
 * sa position x et y, l'image, et l'ecran *
 ****************sorties*****************************
 * rien *
@@ -108,7 +108,7 @@ void appliquerImage(int x, int y, SDL_Surface* source, SDL_Surface* destination)
 * maxime *
 ****************description*************************
 * afficher un morceau d'image sur l'ecran*
-****************entrées*****************************
+****************entrï¿½es*****************************
 * sa position x et y, l'image, et l'ecran, et le morceau *
 ****************sorties*****************************
 * rien *
@@ -123,8 +123,8 @@ void appliquerClip(int x, int y, SDL_Surface* source, SDL_Surface* destination, 
 * maxime *
 ****************description*************************
 * afficher un mot sur l'ecran*
-****************entrées*****************************
-* le message, sa position en x et y, la taille de 
+****************entrï¿½es*****************************
+* le message, sa position en x et y, la taille de
 la police, la gestion du jeu pour les variables
 et le nom de la police*
 ****************sorties*****************************
